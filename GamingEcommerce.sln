@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamingEcommerce.MVC", "GamingEcommerce.MVC\GamingEcommerce.MVC.csproj", "{C329BBEC-347D-40FF-B7AE-98FC620609FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamingEcommerce.DAL", "GamingEcommerce.DAL\GamingEcommerce.DAL.csproj", "{D6812B46-C6DA-40B1-B82F-EC00B5866530}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C329BBEC-347D-40FF-B7AE-98FC620609FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C329BBEC-347D-40FF-B7AE-98FC620609FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C329BBEC-347D-40FF-B7AE-98FC620609FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C329BBEC-347D-40FF-B7AE-98FC620609FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6812B46-C6DA-40B1-B82F-EC00B5866530}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6812B46-C6DA-40B1-B82F-EC00B5866530}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6812B46-C6DA-40B1-B82F-EC00B5866530}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6812B46-C6DA-40B1-B82F-EC00B5866530}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A055F63A-A850-4B59-BF6C-1932E841D879}
+	EndGlobalSection
+EndGlobal
