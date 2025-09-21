@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamingEcommerce.MVC", "Gami
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamingEcommerce.DAL", "GamingEcommerce.DAL\GamingEcommerce.DAL.csproj", "{D6812B46-C6DA-40B1-B82F-EC00B5866530}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamingEcommerce.BLL", "GamingEcommerce.BLL\GamingEcommerce.BLL.csproj", "{EC2EEAEC-3508-40C3-847D-35B33B1F9AC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D6812B46-C6DA-40B1-B82F-EC00B5866530}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6812B46-C6DA-40B1-B82F-EC00B5866530}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6812B46-C6DA-40B1-B82F-EC00B5866530}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC2EEAEC-3508-40C3-847D-35B33B1F9AC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC2EEAEC-3508-40C3-847D-35B33B1F9AC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC2EEAEC-3508-40C3-847D-35B33B1F9AC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC2EEAEC-3508-40C3-847D-35B33B1F9AC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

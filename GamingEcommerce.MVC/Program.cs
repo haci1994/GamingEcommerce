@@ -1,13 +1,19 @@
+using GamingEcommerce.BLL;
+using GamingEcommerce.DAL;
+using GamingEcommerce.DAL.DataContext;
+
 namespace GamingEcommerce.MVC
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.BllServices(builder.Configuration);
 
             var app = builder.Build();
 
@@ -17,6 +23,12 @@ namespace GamingEcommerce.MVC
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dataInitializer = scope.ServiceProvider.GetRequiredService<DataInitializer>();
+                await dataInitializer.Initialize();
             }
 
             app.UseHttpsRedirection();
@@ -30,7 +42,7 @@ namespace GamingEcommerce.MVC
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }
