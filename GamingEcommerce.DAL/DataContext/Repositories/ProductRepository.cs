@@ -17,7 +17,9 @@ namespace GamingEcommerce.DAL.DataContext.Repositories
             var list = DbContext.Products
                 .Where(p => p.DiscountPrice > 0)
                 .OrderBy(p => p.CreatedAt) // Stoka çoxdan artırılan məhsullar görünsün birinci
-                .Take(count);
+                .Take(count)
+                .Include(x => x.ProductColors).ThenInclude(z => z.ProductSizes)
+                .Include(x => x.ProductColors).ThenInclude(z => z.ProductColorImages);
 
             if (list == null || !list.Any())
             {
@@ -33,7 +35,9 @@ namespace GamingEcommerce.DAL.DataContext.Repositories
         {
             var list = DbContext.Products
                 .OrderByDescending(p => p.ViewCount)
-                .Take(count);
+                .Take(count)
+                .Include(x => x.ProductColors).ThenInclude(z => z.ProductSizes)
+                .Include(x => x.ProductColors).ThenInclude(z => z.ProductColorImages);
 
             if (list == null || !list.Any())
             {
@@ -56,6 +60,8 @@ namespace GamingEcommerce.DAL.DataContext.Repositories
 
            var products = await DbContext.Products
             .Where(p => recommendedProductIds.Contains(p.Id))
+            .Include(x => x.ProductColors).ThenInclude(z => z.ProductSizes)
+            .Include(x => x.ProductColors).ThenInclude(z => z.ProductColorImages)
             .ToListAsync();
 
             return products;

@@ -25,7 +25,7 @@
                             </div>
                             <ul>
                                 <li>
-                                    <p>@websiteInfo.Address</p>
+                                    <p>@websiteInfo!.Address??</p>
                                 </li>
                                 <li>
                                     <p>Email: <a href="#">@websiteInfo.Email</a></p>
@@ -38,7 +38,7 @@
                                 Get direction<i class="icon icon-arrow1-top-left"></i>
                             </a>
                             <ul class="tf-social-icon d-flex gap-10">
-                                @foreach(var item in socials)
+                                @foreach(var item in socials??[])
                                 {
                                     <li>
                                         <a href="@item.Url" class="box-icon w_34 round social-@item.Name social-line">
@@ -159,7 +159,7 @@
     </div>
 </footer>
 <!-- /Footer -->
-</div>
+
 
 <!-- gotop -->
 <button id="goTop">

@@ -1,31 +1,26 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using GamingEcommerce.MVC.Models;
+using GamingEcommerce.BLL.Services.WebsiteServices;
+using GamingEcommerce.BLL.ViewModels.WebsiteViewModels;
 
 namespace GamingEcommerce.MVC.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly HomeLayoutService _homeLayoutService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(HomeLayoutService homeLayoutService)
     {
-        _logger = logger;
+        _homeLayoutService = homeLayoutService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
-    }
+        var model = await _homeLayoutService.GetHomeLayoutDataAsync();
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        if (model == null) return NotFound();
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View(model);
     }
 }

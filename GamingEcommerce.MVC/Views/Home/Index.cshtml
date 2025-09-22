@@ -1,4 +1,11 @@
-﻿<!-- Slider -->
+﻿@{
+	HomeLayoutViewModel model = Model;
+
+	var hotDeals = model.HotDeals;
+	var categories = model.Categories;
+}
+
+<!-- Slider -->
 <section class="flat-spacing-5 slider-gaming-accessories">
 	<img class="lazyload"
 		 data-src="images/slider/bg-slider-gaming-accessories.jpg"
@@ -274,111 +281,25 @@
 				 data-space-lg="70"
 				 data-space-md="15">
 				<div class="swiper-wrapper">
-					<div class="swiper-slide">
-						<div class="collection-item-circle has-bg hover-img bg_dark-2">
-							<a href="shop-collection-sub.html"
-							   class="collection-image mw-100 img-style radius-5">
-								<img class="lazyload"
-									 data-src="images/collections/cls-gaming-accessories-1.png"
-									 alt="collection-img"
-									 src="images/collections/cls-gaming-accessories-1.png" />
-							</a>
-							<div class="collection-content text-center">
+					@foreach(var item in categories)
+					{
+						<div class="swiper-slide">
+							<div class="collection-item-circle has-bg hover-img bg_dark-2">
 								<a href="shop-collection-sub.html"
-								   class="link title fw-6 text_white">Controllers</a>
+								   class="collection-image mw-100 img-style radius-5">
+									<img class="lazyload"
+										 data-src="images/collections/@item.ImageName"
+										 alt="collection-img"
+										 src="images/collections/@item.ImageName" />
+								</a>
+								<div class="collection-content text-center">
+									<a href="shop-collection-sub.html"
+									   class="link title fw-6 text_white">Controllers</a>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="collection-item-circle has-bg hover-img bg_dark-2">
-							<a href="shop-collection-sub.html"
-							   class="collection-image mw-100 img-style radius-5">
-								<img class="lazyload"
-									 data-src="images/collections/cls-gaming-accessories-2.png"
-									 alt="collection-img"
-									 src="images/collections/cls-gaming-accessories-2.png" />
-							</a>
-							<div class="collection-content text-center">
-								<a href="shop-collection-sub.html"
-								   class="link title fw-6 text_white">Keyboards</a>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="collection-item-circle has-bg hover-img bg_dark-2">
-							<a href="shop-collection-sub.html"
-							   class="collection-image mw-100 img-style radius-5">
-								<img class="lazyload"
-									 data-src="images/collections/cls-gaming-accessories-3.png"
-									 alt="collection-img"
-									 src="images/collections/cls-gaming-accessories-3.png" />
-							</a>
-							<div class="collection-content text-center">
-								<a href="shop-collection-sub.html"
-								   class="link title fw-6 text_white">Mice</a>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="collection-item-circle has-bg hover-img bg_dark-2">
-							<a href="shop-collection-sub.html"
-							   class="collection-image mw-100 img-style radius-5">
-								<img class="lazyload"
-									 data-src="images/collections/cls-gaming-accessories-4.png"
-									 alt="collection-img"
-									 src="images/collections/cls-gaming-accessories-4.png" />
-							</a>
-							<div class="collection-content text-center">
-								<a href="shop-collection-sub.html"
-								   class="link title fw-6 text_white">Headsets</a>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="collection-item-circle has-bg hover-img bg_dark-2">
-							<a href="shop-collection-sub.html"
-							   class="collection-image mw-100 img-style radius-5">
-								<img class="lazyload"
-									 data-src="images/collections/cls-gaming-accessories-5.png"
-									 alt="collection-img"
-									 src="images/collections/cls-gaming-accessories-5.png" />
-							</a>
-							<div class="collection-content text-center">
-								<a href="shop-collection-sub.html"
-								   class="link title fw-6 text_white">Flight simulation</a>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="collection-item-circle has-bg hover-img bg_dark-2">
-							<a href="shop-collection-sub.html"
-							   class="collection-image mw-100 img-style radius-5">
-								<img class="lazyload"
-									 data-src="images/collections/cls-gaming-accessories-6.png"
-									 alt="collection-img"
-									 src="images/collections/cls-gaming-accessories-6.png" />
-							</a>
-							<div class="collection-content text-center">
-								<a href="shop-collection-sub.html"
-								   class="link title fw-6 text_white">Race simulation</a>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="collection-item-circle has-bg hover-img bg_dark-2">
-							<a href="shop-collection-sub.html"
-							   class="collection-image mw-100 img-style radius-5">
-								<img class="lazyload"
-									 data-src="images/collections/cls-gaming-accessories-7.png"
-									 alt="collection-img"
-									 src="images/collections/cls-gaming-accessories-7.png" />
-							</a>
-							<div class="collection-content text-center">
-								<a href="shop-collection-sub.html"
-								   class="link title fw-6 text_white">Monitor</a>
-							</div>
-						</div>
-					</div>
+					}
+					
 				</div>
 			</div>
 			<div class="nav-sw nav-next-slider nav-next-testimonial lg bg_dark-2">
@@ -426,17 +347,22 @@
 				 data-pagination-md="3"
 				 data-pagination-lg="3">
 				<div class="swiper-wrapper">
-					<div class="swiper-slide">
+
+				@* Hot Deals Burada başlayır*@
+
+					@foreach(var item in hotDeals??[])
+					{
+						<div class="swiper-slide">
 						<div class="card-product type-1 bg_white">
 							<div class="card-product-wrapper">
 								<a href="product-detail.html" class="product-img">
 									<img class="lazyload img-product"
-										 data-src="images/products/gaming-accessories-1.png"
-										 src="images/products/gaming-accessories-1.png"
+										 data-src="images/products/@item.ProductColors[0].ProductColorImages[0].ImageName"
+										 src="images/products/@item.ProductColors[0].ProductColorImages[0].ImageName"
 										 alt="image-product" />
 									<img class="lazyload img-hover"
-										 data-src="images/products/gaming-accessories-2.png"
-										 src="images/products/gaming-accessories-2.png"
+										 data-src="images/products/@item.ProductColors[1].ProductColorImages[0].ImageName"
+										 src="images/products/@item.ProductColors[1].ProductColorImages[0].ImageName"
 										 alt="image-product" />
 								</a>
 								<div class="list-product-btn absolute-2">
@@ -470,480 +396,33 @@
 							</div>
 							<div class="card-product-info text-center">
 								<a href="product-detail.html" class="title link fw-6">Cooler Master Caliber R2</a>
-								<span class="price"> $115.00 </span>
+									<span class="price">
+										<span class="fw-4 text-sale">$@item.Price</span>
+										<span class="text_primary text_red-1">$@item.DiscountPrice</span>
+									</span>
 								<ul class="list-color-product justify-content-center">
-									<li class="list-color-item color-swatch active">
-										<span class="tooltip">Red</span>
-										<span class="swatch-value bg_red"></span>
-										<img class="lazyload"
-											 data-src="images/products/gaming-accessories-1.png"
-											 src="images/products/gaming-accessories-1.png"
-											 alt="image-product" />
-									</li>
-									<li class="list-color-item color-swatch">
-										<span class="tooltip">Black</span>
-										<span class="swatch-value bg_dark"></span>
-										<img class="lazyload"
-											 data-src="images/products/gaming-accessories-3.png"
-											 src="images/products/gaming-accessories-3.png"
-											 alt="image-product" />
-									</li>
+										@foreach(var color in item.ProductColors)
+										{
+											<li class="list-color-item color-swatch active">
+												<span class="tooltip">@color.Name</span>
+												<span class="swatch-value" style="background-color: #@color.HexCode" ></span>
+												<img class="lazyload"
+													 data-src="images/products/@color.ProductColorImages[0].ImageName"
+													 src="images/products/@color.ProductColorImages[0].ImageName"
+													 alt="image-product" />
+											</li>
+										}
+
 								</ul>
 							</div>
 						</div>
 					</div>
-					<div class="swiper-slide">
-						<div class="card-product type-1 bg_white">
-							<div class="card-product-wrapper">
-								<a href="product-detail.html" class="product-img">
-									<img class="lazyload img-product"
-										 data-src="images/products/gaming-accessories-4.png"
-										 src="images/products/gaming-accessories-4.png"
-										 alt="image-product" />
-									<img class="lazyload img-hover"
-										 data-src="images/products/gaming-accessories-5.png"
-										 src="images/products/gaming-accessories-5.png"
-										 alt="image-product" />
-								</a>
-								<div class="list-product-btn absolute-2">
-									<a href="#quick_add"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quick-add tf-btn-loading">
-										<span class="icon icon-bag"></span>
-										<span class="tooltip">Quick Add</span>
-									</a>
-									<a href="#"
-									   class="box-icon bg_white wishlist btn-icon-action">
-										<span class="icon icon-heart"></span>
-										<span class="tooltip">Add to Wishlist</span>
-										<span class="icon icon-delete"></span>
-									</a>
-									<a href="#compare"
-									   data-bs-toggle="offcanvas"
-									   aria-controls="offcanvasLeft"
-									   class="box-icon bg_white compare btn-icon-action">
-										<span class="icon icon-compare"></span>
-										<span class="tooltip">Add to Compare</span>
-										<span class="icon icon-check"></span>
-									</a>
-									<a href="#quick_view"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quickview tf-btn-loading">
-										<span class="icon icon-view"></span>
-										<span class="tooltip">Quick View</span>
-									</a>
-								</div>
-								<div class="on-sale-wrap text-end">
-									<div class="on-sale-item">-24%</div>
-								</div>
-							</div>
-							<div class="card-product-info text-center">
-								<a href="product-detail.html" class="title link fw-6">HTC VIVE Pro Virtual Reality Headset</a>
-								<span class="price">
-									<span class="fw-4 text-sale">$17.00</span>
-									<span class="text_primary text_red-1">$13.00</span>
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="card-product type-1 bg_white">
-							<div class="card-product-wrapper">
-								<a href="product-detail.html" class="product-img">
-									<img class="lazyload img-product"
-										 data-src="images/products/gaming-accessories-6.png"
-										 src="images/products/gaming-accessories-6.png"
-										 alt="image-product" />
-									<img class="lazyload img-hover"
-										 data-src="images/products/gaming-accessories-7.png"
-										 src="images/products/gaming-accessories-7.png"
-										 alt="image-product" />
-								</a>
-								<div class="list-product-btn absolute-2">
-									<a href="#quick_add"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quick-add tf-btn-loading">
-										<span class="icon icon-bag"></span>
-										<span class="tooltip">Quick Add</span>
-									</a>
-									<a href="#"
-									   class="box-icon bg_white wishlist btn-icon-action">
-										<span class="icon icon-heart"></span>
-										<span class="tooltip">Add to Wishlist</span>
-										<span class="icon icon-delete"></span>
-									</a>
-									<a href="#compare"
-									   data-bs-toggle="offcanvas"
-									   aria-controls="offcanvasLeft"
-									   class="box-icon bg_white compare btn-icon-action">
-										<span class="icon icon-compare"></span>
-										<span class="tooltip">Add to Compare</span>
-										<span class="icon icon-check"></span>
-									</a>
-									<a href="#quick_view"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quickview tf-btn-loading">
-										<span class="icon icon-view"></span>
-										<span class="tooltip">Quick View</span>
-									</a>
-								</div>
-								<div class="on-sale-wrap text-end">
-									<div class="on-sale-item">-3%</div>
-								</div>
-							</div>
-							<div class="card-product-info text-center">
-								<a href="product-detail.html" class="title link fw-6">HyperX SoloCast</a>
-								<span class="price">
-									<span class="fw-4 text-sale">$139.00</span>
-									<span class="text_primary text_red-1">$135.00</span>
-								</span>
-								<ul class="list-color-product justify-content-center">
-									<li class="list-color-item color-swatch active">
-										<span class="tooltip">White</span>
-										<span class="swatch-value bg_white"></span>
-										<img class="lazyload"
-											 data-src="images/products/gaming-accessories-6.png"
-											 src="images/products/gaming-accessories-6.png"
-											 alt="image-product" />
-									</li>
-									<li class="list-color-item color-swatch">
-										<span class="tooltip">Black</span>
-										<span class="swatch-value bg_dark"></span>
-										<img class="lazyload"
-											 data-src="images/products/gaming-accessories-8.png"
-											 src="images/products/gaming-accessories-8.png"
-											 alt="image-product" />
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="card-product type-1 bg_white">
-							<div class="card-product-wrapper">
-								<a href="product-detail.html" class="product-img">
-									<img class="lazyload img-product"
-										 data-src="images/products/gaming-accessories-9.png"
-										 src="images/products/gaming-accessories-9.png"
-										 alt="image-product" />
-									<img class="lazyload img-hover"
-										 data-src="images/products/gaming-accessories-10.png"
-										 src="images/products/gaming-accessories-10.png"
-										 alt="image-product" />
-								</a>
-								<div class="list-product-btn absolute-2">
-									<a href="#quick_add"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quick-add tf-btn-loading">
-										<span class="icon icon-bag"></span>
-										<span class="tooltip">Quick Add</span>
-									</a>
-									<a href="#"
-									   class="box-icon bg_white wishlist btn-icon-action">
-										<span class="icon icon-heart"></span>
-										<span class="tooltip">Add to Wishlist</span>
-										<span class="icon icon-delete"></span>
-									</a>
-									<a href="#compare"
-									   data-bs-toggle="offcanvas"
-									   aria-controls="offcanvasLeft"
-									   class="box-icon bg_white compare btn-icon-action">
-										<span class="icon icon-compare"></span>
-										<span class="tooltip">Add to Compare</span>
-										<span class="icon icon-check"></span>
-									</a>
-									<a href="#quick_view"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quickview tf-btn-loading">
-										<span class="icon icon-view"></span>
-										<span class="tooltip">Quick View</span>
-									</a>
-								</div>
-								<div class="on-sale-wrap text-end">
-									<div class="on-sale-item">-24%</div>
-								</div>
-							</div>
-							<div class="card-product-info text-center">
-								<a href="product-detail.html" class="title link fw-6">logitech G213 Prodigy Wired</a>
-								<span class="price">
-									<span class="fw-4 text-sale">$17.00</span>
-									<span class="text_primary text_red-1">$13.00</span>
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="card-product type-1 bg_white">
-							<div class="card-product-wrapper">
-								<a href="product-detail.html" class="product-img">
-									<img class="lazyload img-product"
-										 data-src="images/products/gaming-accessories-11.png"
-										 src="images/products/gaming-accessories-11.png"
-										 alt="image-product" />
-									<img class="lazyload img-hover"
-										 data-src="images/products/gaming-accessories-12.png"
-										 src="images/products/gaming-accessories-12.png"
-										 alt="image-product" />
-								</a>
-								<div class="list-product-btn absolute-2">
-									<a href="#quick_add"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quick-add tf-btn-loading">
-										<span class="icon icon-bag"></span>
-										<span class="tooltip">Quick Add</span>
-									</a>
-									<a href="#"
-									   class="box-icon bg_white wishlist btn-icon-action">
-										<span class="icon icon-heart"></span>
-										<span class="tooltip">Add to Wishlist</span>
-										<span class="icon icon-delete"></span>
-									</a>
-									<a href="#compare"
-									   data-bs-toggle="offcanvas"
-									   aria-controls="offcanvasLeft"
-									   class="box-icon bg_white compare btn-icon-action">
-										<span class="icon icon-compare"></span>
-										<span class="tooltip">Add to Compare</span>
-										<span class="icon icon-check"></span>
-									</a>
-									<a href="#quick_view"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quickview tf-btn-loading">
-										<span class="icon icon-view"></span>
-										<span class="tooltip">Quick View</span>
-									</a>
-								</div>
-								<div class="on-sale-wrap text-end">
-									<div class="on-sale-item">-24%</div>
-								</div>
-							</div>
-							<div class="card-product-info text-center">
-								<a href="product-detail.html" class="title link fw-6">logitech G29 Driving Force Wired Controller</a>
-								<span class="price">
-									<span class="fw-4 text-sale">$17.00</span>
-									<span class="text_primary text_red-1">$13.00</span>
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="card-product type-1 bg_white">
-							<div class="card-product-wrapper">
-								<a href="product-detail.html" class="product-img">
-									<img class="lazyload img-product"
-										 data-src="images/products/gaming-accessories-14.png"
-										 src="images/products/gaming-accessories-14.png"
-										 alt="image-product" />
-									<img class="lazyload img-hover"
-										 data-src="images/products/gaming-accessories-13.png"
-										 src="images/products/gaming-accessories-13.png"
-										 alt="image-product" />
-								</a>
-								<div class="list-product-btn absolute-2">
-									<a href="#quick_add"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quick-add tf-btn-loading">
-										<span class="icon icon-bag"></span>
-										<span class="tooltip">Quick Add</span>
-									</a>
-									<a href="#"
-									   class="box-icon bg_white wishlist btn-icon-action">
-										<span class="icon icon-heart"></span>
-										<span class="tooltip">Add to Wishlist</span>
-										<span class="icon icon-delete"></span>
-									</a>
-									<a href="#compare"
-									   data-bs-toggle="offcanvas"
-									   aria-controls="offcanvasLeft"
-									   class="box-icon bg_white compare btn-icon-action">
-										<span class="icon icon-compare"></span>
-										<span class="tooltip">Add to Compare</span>
-										<span class="icon icon-check"></span>
-									</a>
-									<a href="#quick_view"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quickview tf-btn-loading">
-										<span class="icon icon-view"></span>
-										<span class="tooltip">Quick View</span>
-									</a>
-								</div>
-								<div class="on-sale-wrap text-end">
-									<div class="on-sale-item">-3%</div>
-								</div>
-							</div>
-							<div class="card-product-info text-center">
-								<a href="product-detail.html" class="title link fw-6">HyperX SoloCast</a>
-								<span class="price">
-									<span class="fw-4 text-sale">$139.00</span>
-									<span class="text_primary text_red-1">$135.00</span>
-								</span>
-								<ul class="list-color-product justify-content-center">
-									<li class="list-color-item color-swatch active">
-										<span class="tooltip">White</span>
-										<span class="swatch-value bg_white"></span>
-										<img class="lazyload"
-											 data-src="images/products/gaming-accessories-14.png"
-											 src="images/products/gaming-accessories-14.png"
-											 alt="image-product" />
-									</li>
-									<li class="list-color-item color-swatch">
-										<span class="tooltip">Black</span>
-										<span class="swatch-value bg_dark"></span>
-										<img class="lazyload"
-											 data-src="images/products/gaming-accessories-13.png"
-											 src="images/products/gaming-accessories-13.png"
-											 alt="image-product" />
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="card-product type-1 bg_white">
-							<div class="card-product-wrapper">
-								<a href="product-detail.html" class="product-img">
-									<img class="lazyload img-product"
-										 data-src="images/products/gaming-accessories-15.png"
-										 src="images/products/gaming-accessories-15.png"
-										 alt="image-product" />
-									<img class="lazyload img-hover"
-										 data-src="images/products/gaming-accessories-16.png"
-										 src="images/products/gaming-accessories-16.png"
-										 alt="image-product" />
-								</a>
-								<div class="list-product-btn absolute-2">
-									<a href="#quick_add"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quick-add tf-btn-loading">
-										<span class="icon icon-bag"></span>
-										<span class="tooltip">Quick Add</span>
-									</a>
-									<a href="#"
-									   class="box-icon bg_white wishlist btn-icon-action">
-										<span class="icon icon-heart"></span>
-										<span class="tooltip">Add to Wishlist</span>
-										<span class="icon icon-delete"></span>
-									</a>
-									<a href="#compare"
-									   data-bs-toggle="offcanvas"
-									   aria-controls="offcanvasLeft"
-									   class="box-icon bg_white compare btn-icon-action">
-										<span class="icon icon-compare"></span>
-										<span class="tooltip">Add to Compare</span>
-										<span class="icon icon-check"></span>
-									</a>
-									<a href="#quick_view"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quickview tf-btn-loading">
-										<span class="icon icon-view"></span>
-										<span class="tooltip">Quick View</span>
-									</a>
-								</div>
-								<div class="on-sale-wrap text-end">
-									<div class="on-sale-item">-3%</div>
-								</div>
-							</div>
-							<div class="card-product-info text-center">
-								<a href="product-detail.html" class="title link fw-6">logitech G502</a>
-								<span class="price">
-									<span class="fw-4 text-sale">$139.00</span>
-									<span class="text_primary text_red-1">$135.00</span>
-								</span>
-								<ul class="list-color-product justify-content-center">
-									<li class="list-color-item color-swatch active">
-										<span class="tooltip">White</span>
-										<span class="swatch-value bg_white"></span>
-										<img class="lazyload"
-											 data-src="images/products/gaming-accessories-15.png"
-											 src="images/products/gaming-accessories-15.png"
-											 alt="image-product" />
-									</li>
-									<li class="list-color-item color-swatch">
-										<span class="tooltip">Black</span>
-										<span class="swatch-value bg_dark"></span>
-										<img class="lazyload"
-											 data-src="images/products/gaming-accessories-16.png"
-											 src="images/products/gaming-accessories-16.png"
-											 alt="image-product" />
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="card-product type-1 bg_white">
-							<div class="card-product-wrapper">
-								<a href="product-detail.html" class="product-img">
-									<img class="lazyload img-product"
-										 data-src="images/products/gaming-accessories-17.png"
-										 src="images/products/gaming-accessories-17.png"
-										 alt="image-product" />
-									<img class="lazyload img-hover"
-										 data-src="images/products/gaming-accessories-18.png"
-										 src="images/products/gaming-accessories-18.png"
-										 alt="image-product" />
-								</a>
-								<div class="list-product-btn absolute-2">
-									<a href="#quick_add"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quick-add tf-btn-loading">
-										<span class="icon icon-bag"></span>
-										<span class="tooltip">Quick Add</span>
-									</a>
-									<a href="#"
-									   class="box-icon bg_white wishlist btn-icon-action">
-										<span class="icon icon-heart"></span>
-										<span class="tooltip">Add to Wishlist</span>
-										<span class="icon icon-delete"></span>
-									</a>
-									<a href="#compare"
-									   data-bs-toggle="offcanvas"
-									   aria-controls="offcanvasLeft"
-									   class="box-icon bg_white compare btn-icon-action">
-										<span class="icon icon-compare"></span>
-										<span class="tooltip">Add to Compare</span>
-										<span class="icon icon-check"></span>
-									</a>
-									<a href="#quick_view"
-									   data-bs-toggle="modal"
-									   class="box-icon bg_white quickview tf-btn-loading">
-										<span class="icon icon-view"></span>
-										<span class="tooltip">Quick View</span>
-									</a>
-								</div>
-								<div class="on-sale-wrap text-end">
-									<div class="on-sale-item">-3%</div>
-								</div>
-							</div>
-							<div class="card-product-info text-center">
-								<a href="product-detail.html" class="title link fw-6">logitech MX Master 3S</a>
-								<span class="price">
-									<span class="fw-4 text-sale">$139.00</span>
-									<span class="text_primary text_red-1">$135.00</span>
-								</span>
-								<ul class="list-color-product justify-content-center">
-									<li class="list-color-item color-swatch active">
-										<span class="tooltip">White</span>
-										<span class="swatch-value bg_white"></span>
-										<img class="lazyload"
-											 data-src="images/products/gaming-accessories-17.png"
-											 src="images/products/gaming-accessories-17.png"
-											 alt="image-product" />
-									</li>
-									<li class="list-color-item color-swatch">
-										<span class="tooltip">Black</span>
-										<span class="swatch-value bg_dark"></span>
-										<img class="lazyload"
-											 data-src="images/products/gaming-accessories-19.png"
-											 src="images/products/gaming-accessories-19.png"
-											 alt="image-product" />
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+				
+					}
+
+				
+				@* Hot Deals Burada bitir*@
+				
 			<div class="sw-dots style-2 sw-pagination-sell justify-content-center"></div>
 		</div>
 	</div>
@@ -2039,7 +1518,7 @@
 		<div class="flat-location style-right map-gaming-accessories">
 			<div class="banner-map">
 				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d84000.86305407993!2d2.265665124041157!3d48.85769609108845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2zUGEgcmksIFBow6Fw!5e0!3m2!1svi!2s!4v1730453133238!5m2!1svi!2s"
-						width="100%"
+						width="100"
 						height="300"
 						style="border: 0"
 						allowfullscreen=""
