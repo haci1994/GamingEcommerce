@@ -14,6 +14,7 @@ namespace GamingEcommerce.MVC
             builder.Services.AddControllersWithViews();
 
             builder.Services.BllServices(builder.Configuration);
+            builder.Services.AddDALServices(builder.Configuration);
 
             var app = builder.Build();
 

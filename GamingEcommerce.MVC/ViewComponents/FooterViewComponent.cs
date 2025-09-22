@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GamingEcommerce.MVC.ViewComponents
 {
-    public class HeaderViewComponent : ViewComponent
+    public class FooterViewComponent : ViewComponent
     {
         private readonly HomeLayoutService _homeLayoutService;
 
-        public HeaderViewComponent(HomeLayoutService homeLayoutService)
+        public FooterViewComponent(HomeLayoutService homeLayoutService)
         {
             _homeLayoutService = homeLayoutService;
         }

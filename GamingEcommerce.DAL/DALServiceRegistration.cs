@@ -18,6 +18,7 @@ namespace GamingEcommerce.DAL
                 }));
 
             services.AddScoped<DataInitializer>();
+
             services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
             services.AddScoped<IAddressInterface,AddressRepository>();
             services.AddScoped<ICategoryInterface, CategoryRepository>();

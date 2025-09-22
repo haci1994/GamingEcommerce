@@ -7,6 +7,7 @@
         public required string Name { get; set; }
         public string? Description { get; set; }
         public string? AdditionalInformation { get; set; }
+        public int ViewCount { get; set; }=0;
 
         // Navigation property
         public int CategoryId { get; set; }
