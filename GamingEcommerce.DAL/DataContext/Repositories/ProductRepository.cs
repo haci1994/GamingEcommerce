@@ -52,7 +52,7 @@ namespace GamingEcommerce.DAL.DataContext.Repositories
         public async Task<List<Product>> GetRecommendedProductsAsync(int count)
         {
             var recommendedProductIds = await DbContext.OrderItems
-                .GroupBy(oi => oi.ProductId)
+                .GroupBy(o => o.ProductId)
                 .OrderByDescending(g => g.Count())
                 .Select(g => g.Key)
                 .Take(count)
