@@ -419,9 +419,7 @@
                                 </div>
                             </div>
                         </div>
-
                     }
-
 
                     @* Hot Deals Burada bitir*@
 
@@ -501,13 +499,12 @@
                                         }
 
                                     </ul>
-                                    <a href="#shoppingCart" data-bs-toggle="modal" class="tf-btn tf-btn-loading">
+                                    <a onclick="AddToCart(@item.Id, @item.ProductColors[0].Id)" data-bs-toggle="modal" class="tf-btn tf-btn-loading">
                                         ADD TO CART
                                     </a>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 }
 
