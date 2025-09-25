@@ -43,5 +43,19 @@ namespace GamingEcommerce.BLL.Services.GeneralServices
 
             return products;
         }
+
+        public override async Task<ProductViewModel?> GetByIdAsync(int id)
+        {
+            var productFromDb = await _productRepository.GetByIdAsync(id);
+
+            if(productFromDb == null)
+            {
+                return null;
+            }
+
+            var product = _mapper.Map<ProductViewModel>(productFromDb);
+
+            return product;
+        }
     }
 }

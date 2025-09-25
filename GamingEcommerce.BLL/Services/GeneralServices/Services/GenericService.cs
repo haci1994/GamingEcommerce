@@ -62,7 +62,7 @@ namespace GamingEcommerce.BLL.Services.GeneralServices
             return entity;
         }
 
-        public async Task<TViewModel?> GetByIdAsync(int id)
+        public virtual async Task<TViewModel?> GetByIdAsync(int id)
         {
             var entityFromDb = await Repository.GetByIdAsync(id);
 

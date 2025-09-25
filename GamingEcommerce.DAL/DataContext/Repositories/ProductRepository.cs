@@ -12,6 +12,24 @@ namespace GamingEcommerce.DAL.DataContext.Repositories
             _orderItemService = orderItemService;
         }
 
+        public override async Task<Product?> GetByIdAsync(int id)
+        {
+            var product = DbContext.Products
+                .Include(x=> x.ProductColors).ThenInclude(z=> z.ProductColorImages)
+                .Include(x=> x.ProductColors).ThenInclude(z=> z.ProductSizes)
+                .FirstOrDefault(x=> x.Id == id);
+
+            if (product == null)
+            {
+                return new Product{
+                    Id = 0,
+                    Name = string.Empty,
+                };
+            }
+
+            return product;
+        }
+
         public async Task<List<Product>> GetHotDealsAsync(int count)
         {
             var list = DbContext.Products

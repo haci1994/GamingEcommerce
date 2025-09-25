@@ -368,12 +368,12 @@
                                              alt="image-product" />
                                     </a>
                                     <div class="list-product-btn absolute-2">
-                                        <a href="#quick_add"
-                                           data-bs-toggle="modal"
+                                        
+                                        <a onclick="AddToCart(@item.Id,@item.ProductColors[0].Id)"
                                            class="box-icon bg_white quick-add tf-btn-loading">
                                             <span class="icon icon-bag"></span>
                                             <span class="tooltip">Quick Add</span>
-                                        </a>
+                                       </a>
                                         <a href="#"
                                            class="box-icon bg_white wishlist btn-icon-action">
                                             <span class="icon icon-heart"></span>
@@ -1053,3 +1053,19 @@
     </div>
 </section>
 <!-- /store -->
+
+<script>
+    function AddToCart(id, colorId) {
+      fetch(`/cart/addtocart/${encodeURIComponent(id)}?colorId=${encodeURIComponent(colorId)}`, {
+        credentials: 'same-origin'
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Request failed');
+        return res.text(); // action JSON qaytarırsa: res.json()
+      })
+      .then(htmlOrData => {
+        // Burada UI-ni yenilə (məs. səbət sayını artır)
+      })
+      .catch(console.error);
+    }
+</script>

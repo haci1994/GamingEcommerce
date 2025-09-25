@@ -52,7 +52,7 @@ namespace GamingEcommerce.BLL.Mapping
             CreateMap<Product, ProductViewModel>().ReverseMap();
             CreateMap<Product, CreateProductViewModel>().ReverseMap();
             CreateMap<Product, UpdateProductViewModel>().ReverseMap();
-
+            
             CreateMap<Social, SocialViewModel>().ReverseMap();
             CreateMap<Social, CreateSocialViewModel>().ReverseMap();
             CreateMap<Social, UpdateSocialViewModel>().ReverseMap();
