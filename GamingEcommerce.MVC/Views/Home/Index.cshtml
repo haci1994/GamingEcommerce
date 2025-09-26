@@ -368,31 +368,17 @@
                                              alt="image-product" />
                                     </a>
                                     <div class="list-product-btn absolute-2">
-                                        
+
                                         <a onclick="AddToCart(@item.Id,@item.ProductColors[0].Id)"
                                            class="box-icon bg_white quick-add tf-btn-loading">
                                             <span class="icon icon-bag"></span>
                                             <span class="tooltip">Quick Add</span>
-                                       </a>
+                                        </a>
                                         <a href="#"
                                            class="box-icon bg_white wishlist btn-icon-action">
                                             <span class="icon icon-heart"></span>
                                             <span class="tooltip">Add to Wishlist</span>
                                             <span class="icon icon-delete"></span>
-                                        </a>
-                                        <a href="#compare"
-                                           data-bs-toggle="offcanvas"
-                                           aria-controls="offcanvasLeft"
-                                           class="box-icon bg_white compare btn-icon-action">
-                                            <span class="icon icon-compare"></span>
-                                            <span class="tooltip">Add to Compare</span>
-                                            <span class="icon icon-check"></span>
-                                        </a>
-                                        <a href="#quick_view"
-                                           data-bs-toggle="modal"
-                                           class="box-icon bg_white quickview tf-btn-loading">
-                                            <span class="icon icon-view"></span>
-                                            <span class="tooltip">Quick View</span>
                                         </a>
                                     </div>
                                 </div>
@@ -442,8 +428,8 @@
             <div dir="ltr" class="swiper tf-sw-product-sell-1 wrap-sw-over" data-preview="4" data-tablet="3"
                  data-mobile="2" data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3"
                  data-pagination-lg="3">
-                
-                @foreach(var item in poularProducts ?? [])
+
+                @foreach (var item in poularProducts ?? [])
                 {
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
@@ -464,17 +450,6 @@
                                             <span class="tooltip">Add to Wishlist</span>
                                             <span class="icon icon-delete"></span>
                                         </a>
-                                        <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                           class="box-icon bg_white compare btn-icon-action">
-                                            <span class="icon icon-compare"></span>
-                                            <span class="tooltip">Add to Compare</span>
-                                            <span class="icon icon-check"></span>
-                                        </a>
-                                        <a href="#quick_view" data-bs-toggle="modal"
-                                           class="box-icon bg_white quickview tf-btn-loading">
-                                            <span class="icon icon-view"></span>
-                                            <span class="tooltip">Quick View</span>
-                                        </a>
                                     </div>
                                 </div>
                                 <div class="card-product-info text-center">
@@ -486,8 +461,8 @@
                                         <span class="text_primary text_red-1">$@item.DiscountPrice</span>
                                     </span>
                                     <ul class="list-color-product justify-content-center">
-                                        
-                                        @foreach(var color in item.ProductColors ?? [])
+
+                                        @foreach (var color in item.ProductColors ?? [])
                                         {
                                             <li class="list-color-item color-swatch active">
                                                 <span class="tooltip">@color.Name</span>
@@ -654,8 +629,8 @@
                  data-pagination-md="3"
                  data-pagination-lg="3">
                 <div class="swiper-wrapper">
-                    
-                   @*  Recommended products burada bashlayir *@
+
+                    @*  Recommended products burada bashlayir *@
 
                     @foreach (var item in recommendedProducts ?? [])
                     {
@@ -684,20 +659,6 @@
                                             <span class="icon icon-heart"></span>
                                             <span class="tooltip">Add to Wishlist</span>
                                             <span class="icon icon-delete"></span>
-                                        </a>
-                                        <a href="#compare"
-                                           data-bs-toggle="offcanvas"
-                                           aria-controls="offcanvasLeft"
-                                           class="box-icon bg_white compare btn-icon-action">
-                                            <span class="icon icon-compare"></span>
-                                            <span class="tooltip">Add to Compare</span>
-                                            <span class="icon icon-check"></span>
-                                        </a>
-                                        <a href="#quick_view"
-                                           data-bs-toggle="modal"
-                                           class="box-icon bg_white quickview tf-btn-loading">
-                                            <span class="icon icon-view"></span>
-                                            <span class="tooltip">Quick View</span>
                                         </a>
                                     </div>
                                 </div>
@@ -1015,44 +976,14 @@
     </div>
 </section>
 <!-- /brand -->
-<!-- store -->
-<section class="flat-spacing-14 pb_0">
-    <div class="">
-        <div class="flat-location style-right map-gaming-accessories">
-            <div class="banner-map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d84000.86305407993!2d2.265665124041157!3d48.85769609108845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2zUGEgcmksIFBow6Fw!5e0!3m2!1svi!2s!4v1730453133238!5m2!1svi!2s"
-                        width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-            <div class="content">
-                <h3 class="heading fw-6 font-sora wow fadeInUp" data-wow-delay="0s">Ecomus Store</h3>
-                <p class="subtext wow fadeInUp" data-wow-delay="0s">
-                    301 Front St W Toronto, Canada
-                    <br>
-                    support@ecomus.com
-                    <br>
-                    (08) 8942 1299
-                </p>
-                <p class="subtext wow fadeInUp" data-wow-delay="0s">
-                    Mon - Fri, 8:30am - 10:30pm
-                    <br>
-                    Saturday, 8:30am - 10:30pm
-                    <br>
-                    Sunday Closed
-                </p>
-                <a href="contact-1.html" target="_blank"
-                   class="tf-btn btn-line collection-other-link fw-4 wow fadeInUp" data-wow-delay="0s">
-                    Get
-                    Directions<i class="icon icon-arrow1-top-left"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- /store -->
 
-<script>
+
+@* <script>
     function AddToCart(id, colorId) {
+      let cartContainer = document.getElementById("cart-container");
+      let countBox = document.getElementById("count-box");
+      let subtotal = document.getElementById("cart_subtotal");
+
       fetch(`/cart/addtocart/${encodeURIComponent(id)}?colorId=${encodeURIComponent(colorId)}`, {
         credentials: 'same-origin'
       })
@@ -1061,8 +992,93 @@
         return res.text(); // action JSON qaytarırsa: res.json()
       })
       .then(htmlOrData => {
-        // Burada UI-ni yenilə (məs. səbət sayını artır)
+            if(htmlOrData!=""){
+                cartContainer.insertAdjacentHTML('beforeend', htmlOrData);
+                let countOfBox = parseInt(countBox.textContent, 10) || 0;
+                countBox.textContent = countOfBox+1;
+                let price = 0;
+
+                fetch(`/cart/getprice/${encodeURIComponent(id)}`,
+                {credentials: 'same-origin'})
+                .then(res => res.text())
+                .then(text => {
+                    price = parseFloat(text) || 0;                
+                });
+
+                let total = parseFloat(subtotal.textContent) || 0;
+                subtotal.textContent = total + price;
+            } else {
+               let idOfCartItem = `${id}-${id}`;
+               let productDiv = document.getElementById(idOfCartItem);
+               let productCountBox = productDiv.querySelector("input");               
+               let countOfBox = parseInt(countBox.textContent, 10) || 0;
+               countBox.textContent = countOfBox+1;
+               
+               let productCount = parseInt(productCountBox.value,10) || 0;
+               productCountBox.value = productCount +1;
+            }})
+      .catch(console.error);
+    }
+</script> *@
+
+<script>
+    function AddToCart(id, colorId) {
+      let cartContainer = document.getElementById("cart-container");
+      let countBox      = document.getElementById("count-box");
+      let subtotal      = document.getElementById("cart_subtotal");
+
+      fetch(`/cart/addtocart/${encodeURIComponent(id)}?colorId=${encodeURIComponent(colorId)}`, {
+        credentials: 'same-origin',
+        method: 'POST' // GET-dirsə sil
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Request failed');
+        return res.text();
+      })
+      .then(htmlOrData => {
+        const html = (htmlOrData || '').trim();
+
+        if (html) {
+          cartContainer?.insertAdjacentHTML('beforeend', html);
+          if (countBox) {
+            const cur = parseInt(countBox.textContent, 10) || 0;
+            countBox.textContent = cur + 1;
+          }
+        } else {
+          // Mövcud sətirdirsə: sayı +1
+          const productDiv = document.querySelector(`.tf-mini-cart-item[data-product-id="${id}"]`)
+                          || document.getElementById(`${id}-${id}`); // səndə belədirsə
+          const productCountBox = productDiv?.querySelector('input[name="number"]') || productDiv?.querySelector('input');
+          if (productCountBox) productCountBox.value = (parseInt(productCountBox.value,10)||0) + 1;
+
+          if (countBox) {
+            const cur = parseInt(countBox.textContent, 10) || 0;
+            countBox.textContent = cur + 1;
+          }
+        }
+
+        // ---> Subtotal-ı yalnız qiymət gəldikdən sonra artır
+        return fetch(`/cart/getprice/${encodeURIComponent(id)}`, { credentials: 'same-origin' });
+      })
+      .then(r => {
+        if (!r.ok) throw new Error('Price request failed');
+        return r.text();
+      })
+      .then(text => {
+        const unit = parseFloat(String(text).trim().replace(',', '.')) || 0;
+        if (subtotal) {
+          // subtotal-da $ / USD ola bilər → yalnız ədədi çıxart
+          const cur = parseFloat(String(subtotal.textContent).replace(/[^0-9.,-]/g, '').replace(',', '.')) || 0;
+          const next = (cur + unit).toFixed(2);
+          // lazım olana uyğun yaz:
+          // subtotal.textContent = `$${next} USD`;
+          subtotal.textContent = next;
+        }
       })
       .catch(console.error);
     }
+
+    
 </script>
+
+

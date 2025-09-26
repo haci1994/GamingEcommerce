@@ -1,6 +1,7 @@
 ﻿using GamingEcommerce.BLL.Services.WebsiteServices;
 using GamingEcommerce.BLL.ViewModels.WebsiteViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace GamingEcommerce.MVC.ViewComponents
 {
@@ -23,7 +24,19 @@ namespace GamingEcommerce.MVC.ViewComponents
                 model = new HomeLayoutViewModel();
             }
 
-            return View(model);
+            var basketList = new List<BasketItemViewModel>();
+
+            var basketListJson = Request.Cookies["GAMING_ECOMMERCE_BASKET"];
+
+            if (string.IsNullOrEmpty(basketListJson))
+            {
+                model.BasketItems = basketList;
+            } else
+            {
+                model.BasketItems = JsonConvert.DeserializeObject<List<BasketItemViewModel>>(basketListJson);
+            }
+
+                return View(model);
         }
 
         

@@ -12,6 +12,7 @@ namespace GamingEcommerce.BLL.ViewModels.WebsiteViewModels
         public List<ProductViewModel>? RecommendedProducts { get; set; } = [];
         public List<LanguageViewModel>? Languages { get; set; } = [];
         public List<CurrencyViewModel>? Currencies { get; set; } = [];
+        public List<BasketItemViewModel>? BasketItems { get; set;} = [];
 
     }
 }
