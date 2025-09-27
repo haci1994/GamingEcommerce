@@ -1,0 +1,70 @@
+﻿@{
+    LoadMoreViewModel model = Model;
+    var products = model.Products;
+}
+
+
+ <!-- card product 1 -->
+@foreach (var product in products)
+{
+                        <div class="card-product grid" data-availability="In stock" data-brand="Ecomus">
+                            <div class="card-product-wrapper">
+                                <a href="product-detail.html" class="product-img">
+                                    <img class="lazyload img-product" data-src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName"
+                                         src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName" alt="image-product">
+
+                @if (product.ProductColors.Count > 0)
+                {
+                                            <img class="lazyload img-hover" data-src="/images/products/@product.ProductColors[1].ProductColorImages[0].ImageName"
+                                                 src="/images/products/@product.ProductColors[1].ProductColorImages[0].ImageName" alt="image-product">
+                }
+                else
+                {
+                                            <img class="lazyload img-hover" data-src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName"
+                                                 src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName" alt="image-product">
+                }
+
+                                </a>
+                                <div class="list-product-btn absolute-2">
+                                    <a href="#quick_add" data-bs-toggle="modal"
+                                       class="box-icon bg_white quick-add tf-btn-loading">
+                                        <span class="icon icon-bag"></span>
+                                        <span class="tooltip">Quick Add</span>
+                                    </a>
+                                    <a href="#" class="box-icon bg_white wishlist btn-icon-action">
+                                        <span class="icon icon-heart"></span>
+                                        <span class="tooltip">Add to Wishlist</span>
+                                        <span class="icon icon-delete"></span>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="card-product-info">
+                                <a href="product-detail.html" class="title link">@product.Name</a>
+                                <span class="price current-price">$@product.Price</span>
+                                <ul class="list-color-product">
+
+                @if (product.ProductColors.Count > 1)
+                {
+                                            <li class="list-color-item color-swatch active">
+                                                <span class="tooltip">@product.ProductColors[0].Name</span>
+                                                <span class="swatch-value" style="background-color:#@product.ProductColors[0].HexCode"></span>
+                                                <img class="lazyload" data-src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName"
+                                                     src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName" alt="image-product">
+                                            </li>
+
+                    @for (int i = 1; i < product.ProductColors.Count; i++)
+                    {
+                                                    <li class="list-color-item color-swatch">
+                                                        <span class="tooltip">@product.ProductColors[i].Name</span>
+                                                        <span class="swatch-value" style="background-color:#@product.ProductColors[i].HexCode"></span>
+                                                        <img class="lazyload" data-src="/images/products/@product.ProductColors[i].ProductColorImages[0].ImageName"
+                                                             src="/images/products/@product.ProductColors[i].ProductColorImages[0].ImageName" alt="image-product">
+                                                    </li>
+                    }
+                }
+
+                                </ul>
+                            </div>
+                        </div>
+}

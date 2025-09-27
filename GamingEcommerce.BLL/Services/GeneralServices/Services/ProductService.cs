@@ -4,6 +4,8 @@ using GamingEcommerce.BLL.ViewModels.GeneralViewModels;
 using GamingEcommerce.DAL.DataContext.Contracts;
 using GamingEcommerce.DAL.DataContext.Entities;
 using GamingEcommerce.DAL.DataContext.Repositories;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace GamingEcommerce.BLL.Services.GeneralServices
 {
@@ -56,6 +58,15 @@ namespace GamingEcommerce.BLL.Services.GeneralServices
             var product = _mapper.Map<ProductViewModel>(productFromDb);
 
             return product;
+        }
+
+        public override async Task<List<ProductViewModel>> GetAllAsync(Expression<Func<Product, bool>>? predicate = null, Func<IQueryable<Product>, IIncludableQueryable<Product, object>>? include = null, Func<IQueryable<Product>, IOrderedQueryable<Product>>? orderBy = null, bool asnotracking = false)
+        {
+            var productsFromDb = await _productRepository.GetAllAsync(predicate, include, orderBy, asnotracking);
+
+            var products = _mapper.Map<List<ProductViewModel>>(productsFromDb);
+
+            return products;
         }
     }
 }

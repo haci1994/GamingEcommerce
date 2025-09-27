@@ -1,6 +1,8 @@
 ﻿using GamingEcommerce.BLL.Services.Contracts;
 using GamingEcommerce.BLL.ViewModels.WebsiteViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace GamingEcommerce.MVC.Controllers
 {
@@ -20,10 +22,13 @@ namespace GamingEcommerce.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var categories = await _categoryService.GetAllAsync();
-            var products = await _productService.GetAllAsync();
+            var products = await _productService.GetAllAsync(include:
+                x => x.Include(z => z.ProductColors)
+                    .ThenInclude(h=> h.ProductColorImages)
+                .Include(z=> z.ProductColors).ThenInclude(h=> h.ProductSizes));
             var colors = await _productColorService.GetAllAsync();
 
-            products = products.Take(4).ToList();
+            products = products.Take(1).ToList();
 
             var model = new ShopPageViewModel
             {
@@ -33,6 +38,19 @@ namespace GamingEcommerce.MVC.Controllers
             };
 
             return View(model);
+        }
+
+        public async Task<IActionResult> LoadMore(int skip)
+        {
+            var products = await _productService.GetAllAsync(include:
+                x => x.Include(z => z.ProductColors)
+                    .ThenInclude(h => h.ProductColorImages)
+                .Include(z => z.ProductColors).ThenInclude(h => h.ProductSizes));
+            products = products.Skip(skip).Take(1).ToList();
+
+            var json = JsonConvert.SerializeObject(products);
+
+            return Json(json);
         }
     }
 }

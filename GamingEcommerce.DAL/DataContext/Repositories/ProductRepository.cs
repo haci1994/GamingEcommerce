@@ -1,6 +1,8 @@
 ﻿using GamingEcommerce.DAL.DataContext.Contracts;
 using GamingEcommerce.DAL.DataContext.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace GamingEcommerce.DAL.DataContext.Repositories
 {
@@ -15,13 +17,14 @@ namespace GamingEcommerce.DAL.DataContext.Repositories
         public override async Task<Product?> GetByIdAsync(int id)
         {
             var product = DbContext.Products
-                .Include(x=> x.ProductColors).ThenInclude(z=> z.ProductColorImages)
-                .Include(x=> x.ProductColors).ThenInclude(z=> z.ProductSizes)
-                .FirstOrDefault(x=> x.Id == id);
+                .Include(x => x.ProductColors).ThenInclude(z => z.ProductColorImages)
+                .Include(x => x.ProductColors).ThenInclude(z => z.ProductSizes)
+                .FirstOrDefault(x => x.Id == id);
 
             if (product == null)
             {
-                return new Product{
+                return new Product
+                {
                     Id = 0,
                     Name = string.Empty,
                 };
@@ -76,11 +79,11 @@ namespace GamingEcommerce.DAL.DataContext.Repositories
                 .Take(count)
                 .ToListAsync();
 
-           var products = await DbContext.Products
-            .Where(p => recommendedProductIds.Contains(p.Id))
-            .Include(x => x.ProductColors).ThenInclude(z => z.ProductSizes)
-            .Include(x => x.ProductColors).ThenInclude(z => z.ProductColorImages)
-            .ToListAsync();
+            var products = await DbContext.Products
+             .Where(p => recommendedProductIds.Contains(p.Id))
+             .Include(x => x.ProductColors).ThenInclude(z => z.ProductSizes)
+             .Include(x => x.ProductColors).ThenInclude(z => z.ProductColorImages)
+             .ToListAsync();
 
             return products;
         }
