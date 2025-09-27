@@ -106,10 +106,11 @@
                                                 <div class="meta-variant">@item.Color</div>
                                                 <div class="price fw-6">$@item.Price </div>
                                                 <div class="tf-mini-cart-btns">
-                                                    <div class="wg-quantity small">
-                                                        <span class="btn-quantity minus-btn">-</span>
-                                                        <input type="text" name="number" value="@item.Count">
-                                                        <span class="btn-quantity plus-btn">+</span>
+                                                    <div class="wg-quantity small" style="background-color:white; border: 1px solid gray">
+                                                        @* <span class="btn-quantity minus-btn">-</span> *@
+                                                        <input disabled type="text"  name="number" value="@item.Count">
+                                                        <span style="padding-right:20px">pcs</span>
+                                                        @* <span class="btn-quantity plus-btn">+</span> *@
                                                     </div>
                                                     <a id="RemoveButtonInBasket" class="tf-mini-cart-remove" onclick="RemoveFromBasket(@item.ProductId, this)">Remove</a>
                                                 </div>
@@ -330,7 +331,7 @@
                                     </a>                                    
                                 </li>
                                 <li class="menu-item">
-                                    <a  class="item-link text-white">
+                                    <a asp-action="index" asp-controller="shop" class="item-link text-white">
                                         Shop
                                     </a>
                                 </li>                                

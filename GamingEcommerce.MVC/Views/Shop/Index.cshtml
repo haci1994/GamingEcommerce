@@ -1,0 +1,8 @@
+﻿@{
+    ShopPageViewModel model = Model;
+    var categories = model.Categories;
+    var products = model.Products;
+    var colors = model.Colors;
+}
+
+<partial name="_ProductsPartialView" model="new ProductsPartialViewModel{Products=products, Categories = categories, Colors = colors}"></partial>
