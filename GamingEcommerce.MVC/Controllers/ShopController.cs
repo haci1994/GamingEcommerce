@@ -27,6 +27,7 @@ namespace GamingEcommerce.MVC.Controllers
                     .ThenInclude(h=> h.ProductColorImages)
                 .Include(z=> z.ProductColors).ThenInclude(h=> h.ProductSizes));
             var colors = await _productColorService.GetAllAsync();
+            var total = products.Count();
 
             products = products.Take(1).ToList();
 
@@ -34,7 +35,8 @@ namespace GamingEcommerce.MVC.Controllers
             {
                 Products = products,
                 Categories = categories,
-                Colors = colors
+                Colors = colors,
+                TotalProductsCount = total
             };
 
             return View(model);
@@ -48,9 +50,9 @@ namespace GamingEcommerce.MVC.Controllers
                 .Include(z => z.ProductColors).ThenInclude(h => h.ProductSizes));
             products = products.Skip(skip).Take(1).ToList();
 
-            var json = JsonConvert.SerializeObject(products);
+            var data = JsonConvert.SerializeObject(products);
 
-            return Json(json);
+            return Content(data, "application/json");
         }
     }
 }

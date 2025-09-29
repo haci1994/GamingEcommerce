@@ -9,8 +9,8 @@
     var currencies = model.Currencies;
 
     var basketItems = model.BasketItems;
-    var basketItemsCount = basketItems.Sum(x => x.Count);
-    var basketTotalPrice = basketItems.Sum(x => x.Count * x.Price);
+    var basketItemsCount = basketItems!.Sum(x => x.Count);
+    var basketTotalPrice = basketItems!.Sum(x => x.Count * x.Price);
 }
 <!-- RTL -->
 <a href="#" id="toggle-rtl" class="tf-btn animate-hover-btn btn-fill">RTL</a>
@@ -53,13 +53,13 @@
                     <div class="d-inline-block">
                         Need help?
                         <span class="fw-7">
-                            Call Us: <a href="tel:@websiteInfo.HelpPhone" style="text-decoration: underline;"
-                                        aria-describedby="external-message">@websiteInfo.HelpPhone</a>
+                            Call Us: <a href="tel:@websiteInfo??[].HelpPhone" style="text-decoration: underline;"
+                                        aria-describedby="external-message">@websiteInfo?.HelpPhone</a>
                         </span>
                     </div>
                     <div class="tf-currencies">
                         <select class="image-select center style-default type-currencies">
-                            @foreach (var item in currencies)
+                            @foreach (var item in currencies??[])
                             {
                                 <option data-thumbnail="images/country/@item.FlagName">@item.Name</option>
                             }
@@ -67,7 +67,7 @@
                     </div>
                     <div class="tf-languages">
                         <select class="image-select center style-default type-languages">
-                            @foreach (var item in languages)
+                            @foreach (var item in languages??[])
                             {
                                 <option>@item.Name</option>
                             }
@@ -93,7 +93,7 @@
                         <div class="tf-mini-cart-main">
                             <div class="tf-mini-cart-sroll">
                                 <div class="tf-mini-cart-items" id="cart-container">
-                                    @foreach (var item in basketItems)
+                                    @foreach (var item in basketItems??[])
                                     {
                                         <div class="tf-mini-cart-item" id="@item.ProductId-@item.ProductId">
                                             <div class="tf-mini-cart-image">
@@ -354,7 +354,7 @@
                             </svg>
                         </div>
                         <div class="number d-grid">
-                            <a class="phone">@websiteInfo.SupportPhone</a>
+                            <a class="phone">@websiteInfo!.SupportPhone</a>
                             <span class="fw-5 text text-white">Support Center</span>
                         </div>
                     </div>
@@ -363,7 +363,7 @@
         </div>
     </header>
     <!-- /header -->
-
+</div>
     <script>
         // Mətndən pul dəyərini ədədi formaya çevirən util
         function parseMoney(str) {

@@ -3,6 +3,7 @@
     var categories = model.Categories;
     var products = model.Products;
     var colors = model.Colors;
+    var total = model.TotalProductsCount;
 }
 
 <!-- Section Product -->
@@ -90,95 +91,97 @@
 
                 <!-- card product 2 -->
                 <!-- pagination -->
-                <ul class="wg-pagination tf-pagination-list">
-                    <li class="active">
-                        <button id="loadMoreBtn" class="btn btn-primary">Load More</button>
-                    </li>
-                </ul>
+                
             </div>
-
+            <ul class="wg-pagination tf-pagination-list">
+                <li class="active">
+                    <button id="loadMoreBtn" class="btn btn-primary">Load More</button>
+                </li>
+            </ul>
         </div>
     </div>
 </section>
 
-@* <script>
+<script>
     let loadMoreBtn = document.getElementById("loadMoreBtn");
-    let skip = 0;
+    let skip = 1;
     let gridLayout = document.getElementById("gridLayout");
 
     loadMoreBtn.addEventListener('click', function()
     {
         fetch(`/shop/loadmore?skip=${skip}`)
-        .then(response => response.json())
-        .then(json => {
-            console.log(json);
+        .then(res => res.json())
+        .then(products => {
+                skip++;
+                 if (!Array.isArray(products)) {
+              console.warn("Gələn data array deyil:", products);
+              return;
+            }
 
-            foreach(let product of json){
-                gridLayout.innerHTML += ` <div class="card-product grid" data-availability="In stock" data-brand="Ecomus">
-                            <div class="card-product-wrapper">
-                                <a href="product-detail.html" class="product-img">
-                                    <img class="lazyload img-product" data-src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName"
-                                         src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName" alt="image-product">
+            if(skip >= @total) {
+                    loadMoreBtn.remove();
+            }
+            
+        for(let product of products){
+            gridLayout.innerHTML += 
+            `
+                <div class="card-product grid" data-availability="In stock" data-brand="Ecomus">
+            <div class="card-product-wrapper">
+                <a href="product-detail.html" class="product-img">
+                    <img class="lazyload img-product" data-src="/images/products/${product.ProductColors[0].ProductColorImages[0].ImageName}"
+                         src="/images/products/${product.ProductColors[0].ProductColorImages[0].ImageName}" alt="image-product">
 
-    @if (product.ProductColors.Count > 0)
+    if (product.ProductColors.Count > 0)
     {
-                                                <img class="lazyload img-hover" data-src="/images/products/@product.ProductColors[1].ProductColorImages[0].ImageName"
-                                                     src="/images/products/@product.ProductColors[1].ProductColorImages[0].ImageName" alt="image-product">
+                            <img class="lazyload img-hover" data-src="/images/products/${product.ProductColors[1].ProductColorImages[0].ImageName}"
+                                 src="/images/products/${product.ProductColors[1].ProductColorImages[0].ImageName}" alt="image-product">
     }
     else
     {
-                                                <img class="lazyload img-hover" data-src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName"
-                                                     src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName" alt="image-product">
+                            <img class="lazyload img-hover" data-src="/images/products/${product.ProductColors[0].ProductColorImages[0].ImageName}"
+                                 src="/images/products/${product.ProductColors[0].ProductColorImages[0].ImageName}" alt="image-product">
     }
 
-                                </a>
-                                <div class="list-product-btn absolute-2">
-                                    <a href="#quick_add" data-bs-toggle="modal"
-                                       class="box-icon bg_white quick-add tf-btn-loading">
-                                        <span class="icon icon-bag"></span>
-                                        <span class="tooltip">Quick Add</span>
-                                    </a>
-                                    <a href="#" class="box-icon bg_white wishlist btn-icon-action">
-                                        <span class="icon icon-heart"></span>
-                                        <span class="tooltip">Add to Wishlist</span>
-                                        <span class="icon icon-delete"></span>
-                                    </a>
+                </a>
+                <div class="list-product-btn absolute-2">
+                    <a onclick="AddToCart(${product.Id},${product.ProductColors[0].Id})" class="box-icon bg_white quick-add tf-btn-loading">
+                        <span class="icon icon-bag"></span>
+                        <span class="tooltip">Quick Add</span>
+                    </a>
+                    <a href="#" class="box-icon bg_white wishlist btn-icon-action">
+                        <span class="icon icon-heart"></span>
+                        <span class="tooltip">Add to Wishlist</span>
+                        <span class="icon icon-delete"></span>
+                    </a>
 
-                                </div>
-                            </div>
-                            <div class="card-product-info">
-                                <a href="product-detail.html" class="title link">@product.Name</a>
-                                <span class="price current-price">$@product.Price</span>
-                                <ul class="list-color-product">
+                </div>
+            </div>
+            <div class="card-product-info">
+                <a href="product-detail.html" class="title link">${product.Name}</a>
+                <span class="price current-price">$${product.Price}</span>
+                <ul class="list-color-product">
 
-    @if (product.ProductColors.Count > 1)
-    {
-                                                <li class="list-color-item color-swatch active">
-                                                    <span class="tooltip">@product.ProductColors[0].Name</span>
-                                                    <span class="swatch-value" style="background-color:#@product.ProductColors[0].HexCode"></span>
-                                                    <img class="lazyload" data-src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName"
-                                                         src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName" alt="image-product">
-                                                </li>
+       
+                                <li class="list-color-item color-swatch active">
+                                    <span class="tooltip">${product.ProductColors[0].Name}</span>
+                                    <span class="swatch-value" style="background-color:#${product.ProductColors[0].HexCode}"></span>
+                                    <img class="lazyload" data-src="/images/products/${product.ProductColors[0].ProductColorImages[0].ImageName}"
+                                         src="/images/products/${product.ProductColors[0].ProductColorImages[0].ImageName}" alt="image-product">
+                                </li>
 
-        @for (int i = 1; i < product.ProductColors.Count; i++)
-        {
-                                                            <li class="list-color-item color-swatch">
-                                                                <span class="tooltip">@product.ProductColors[i].Name</span>
-                                                                <span class="swatch-value" style="background-color:#@product.ProductColors[i].HexCode"></span>
-                                                                <img class="lazyload" data-src="/images/products/@product.ProductColors[i].ProductColorImages[0].ImageName"
-                                                                     src="/images/products/@product.ProductColors[i].ProductColorImages[0].ImageName" alt="image-product">
-                                                            </li>
-        }
-    }
+            
+       
 
-                                </ul>
-                            </div>
-                        </div>`
-            }
-        }
-    )});
+                </ul>
+            </div>
+        </div>
+            `
 
-</script> *@
+        };
+
+        
+})});
+</script>
 
 <!-- /Section Product -->
 <!-- gotop -->
@@ -1912,7 +1915,7 @@
             <div class="wrap">
                 <div class="tf-mini-cart-threshold">
                     <div class="tf-progress-bar">
-                        <span style="width: 50%;">
+                        <div style="width: 50%;">
                             <div class="progress-car">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="14" viewBox="0 0 21 14"
                                      fill="currentColor">
@@ -1921,7 +1924,7 @@
                                     </path>
                                 </svg>
                             </div>
-                        </span>
+                        </div>
                     </div>
                     <div class="tf-progress-msg">
                         Buy <span class="price fw-6">$75.00</span> more to enjoy <span class="fw-6">
@@ -2093,7 +2096,7 @@
                         <div class="overplay tf-mini-cart-tool-close"></div>
                         <div class="tf-mini-cart-tool-content">
                             <label for="Cart-note" class="tf-mini-cart-tool-text">
-                                <div class="icon">
+                                <span class="icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18"
                                          viewBox="0 0 16 18" fill="currentColor">
                                         <path d="M5.12187 16.4582H2.78952C2.02045 16.4582 1.39476 15.8325 1.39476 15.0634V2.78952C1.39476 2.02045 2.02045 1.39476 2.78952 1.39476H11.3634C12.1325 1.39476 12.7582 2.02045 12.7582 2.78952V7.07841C12.7582 7.46357 13.0704 7.77579 13.4556 7.77579C13.8407 7.77579 14.1529 7.46357 14.1529 7.07841V2.78952C14.1529 1.25138 12.9016 0 11.3634 0H2.78952C1.25138 0 0 1.25138 0 2.78952V15.0634C0 16.6015 1.25138 17.8529 2.78952 17.8529H5.12187C5.50703 17.8529 5.81925 17.5407 5.81925 17.1555C5.81925 16.7704 5.50703 16.4582 5.12187 16.4582Z">
@@ -2101,7 +2104,7 @@
                                         <path d="M15.3882 10.0971C14.5724 9.28136 13.2452 9.28132 12.43 10.0965L8.60127 13.9168C8.51997 13.9979 8.45997 14.0979 8.42658 14.2078L7.59276 16.9528C7.55646 17.0723 7.55292 17.1993 7.58249 17.3207C7.61206 17.442 7.67367 17.5531 7.76087 17.6425C7.84807 17.7319 7.95768 17.7962 8.07823 17.8288C8.19879 17.8613 8.32587 17.8609 8.44621 17.8276L11.261 17.0479C11.3769 17.0158 11.4824 16.9543 11.5675 16.8694L15.3882 13.0559C16.2039 12.2401 16.2039 10.9129 15.3882 10.0971ZM10.712 15.7527L9.29586 16.145L9.71028 14.7806L12.2937 12.2029L13.2801 13.1893L10.712 15.7527ZM14.4025 12.0692L14.2673 12.204L13.2811 11.2178L13.4157 11.0834C13.6876 10.8115 14.1301 10.8115 14.402 11.0834C14.6739 11.3553 14.6739 11.7977 14.4025 12.0692Z">
                                         </path>
                                     </svg>
-                                </div>
+                                </span>
                                 <span>Add Order Note</span>
                             </label>
                             <textarea name="note" id="Cart-note" placeholder="How can we help you?"></textarea>
@@ -2364,19 +2367,19 @@
                         <div class="variant-picker-values">
                             <input type="radio" name="size" id="values-s" checked>
                             <label class="style-text" for="values-s" data-value="S">
-                                <p>S</p>
+                                <span>S</span>
                             </label>
                             <input type="radio" name="size" id="values-m">
                             <label class="style-text" for="values-m" data-value="M">
-                                <p>M</p>
+                                <span>M</span>
                             </label>
                             <input type="radio" name="size" id="values-l">
                             <label class="style-text" for="values-l" data-value="L">
-                                <p>L</p>
+                                <span>L</span>
                             </label>
                             <input type="radio" name="size" id="values-xl">
                             <label class="style-text" for="values-xl" data-value="XL">
-                                <p>XL</p>
+                                <span>XL</span>
                             </label>
                         </div>
                     </div>
@@ -2499,19 +2502,19 @@
                                 <div class="variant-picker-values">
                                     <input type="radio" name="size-1" id="values-s-1" checked>
                                     <label class="style-text" for="values-s-1" data-value="S">
-                                        <p>S</p>
+                                        <span>S</span>
                                     </label>
                                     <input type="radio" name="size-1" id="values-m-1">
                                     <label class="style-text" for="values-m-1" data-value="M">
-                                        <p>M</p>
+                                        <span>M</span>
                                     </label>
                                     <input type="radio" name="size-1" id="values-l-1">
                                     <label class="style-text" for="values-l-1" data-value="L">
-                                        <p>L</p>
+                                        <span>L</span>
                                     </label>
                                     <input type="radio" name="size-1" id="values-xl-1">
                                     <label class="style-text" for="values-xl-1" data-value="XL">
-                                        <p>XL</p>
+                                        <span>XL</span>
                                     </label>
                                 </div>
                             </div>

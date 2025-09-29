@@ -3,6 +3,67 @@
     var categories = model.Categories;
     var products = model.Products;
     var colors = model.Colors;
+    var total = model.TotalProductsCount;
 }
 
-<partial name="_ProductsPartialView" model="new ProductsPartialViewModel{Products=products, Categories = categories, Colors = colors}"></partial>
+<partial name="_ProductsPartialView" model="new ProductsPartialViewModel{Products=products, Categories = categories, Colors = colors,TotalProductsCount=total}"></partial>
+
+<script>
+    function AddToCart(id, colorId) {
+      let cartContainer = document.getElementById("cart-container");
+      let countBox      = document.getElementById("count-box");
+      let subtotal      = document.getElementById("cart_subtotal");
+
+      fetch(`/cart/addtocart/${encodeURIComponent(id)}?colorId=${encodeURIComponent(colorId)}`, {
+        credentials: 'same-origin',
+        method: 'POST' // GET-dirsə sil
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Request failed');
+        return res.text();
+      })
+      .then(htmlOrData => {
+        const html = (htmlOrData || '').trim();
+
+        if (html) {
+          cartContainer?.insertAdjacentHTML('beforeend', html);
+          if (countBox) {
+            const cur = parseInt(countBox.textContent, 10) || 0;
+            countBox.textContent = cur + 1;
+          }
+        } else {
+          // Mövcud sətirdirsə: sayı +1
+          const productDiv = document.querySelector(`.tf-mini-cart-item[data-product-id="${id}"]`)
+                          || document.getElementById(`${id}-${id}`); // səndə belədirsə
+          const productCountBox = productDiv?.querySelector('input[name="number"]') || productDiv?.querySelector('input');
+          if (productCountBox) productCountBox.value = (parseInt(productCountBox.value,10)||0) + 1;
+
+          if (countBox) {
+            const cur = parseInt(countBox.textContent, 10) || 0;
+            countBox.textContent = cur + 1;
+          }
+        }
+
+        // ---> Subtotal-ı yalnız qiymət gəldikdən sonra artır
+        return fetch(`/cart/getprice/${encodeURIComponent(id)}`, { credentials: 'same-origin' });
+      })
+      .then(r => {
+        if (!r.ok) throw new Error('Price request failed');
+        return r.text();
+      })
+      .then(text => {
+        const unit = parseFloat(String(text).trim().replace(',', '.')) || 0;
+        if (subtotal) {
+          // subtotal-da $ / USD ola bilər → yalnız ədədi çıxart
+          const cur = parseFloat(String(subtotal.textContent).replace(/[^0-9.,-]/g, '').replace(',', '.')) || 0;
+          const next = (cur + unit).toFixed(2);
+          // lazım olana uyğun yaz:
+          // subtotal.textContent = `$${next} USD`;
+          subtotal.textContent = next;
+        }
+      })
+      .catch(console.error);
+    }
+
+
+</script>

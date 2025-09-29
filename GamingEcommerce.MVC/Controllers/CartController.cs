@@ -30,7 +30,7 @@ namespace GamingEcommerce.MVC.Controllers
                 return "Error";
             else
             {
-                color = existingProduct.ProductColors.FirstOrDefault(x => x.Id == colorId).Name;
+                color = existingProduct.ProductColors.FirstOrDefault(x => x.Id == colorId)!.Name;
             }
             
             var list = GetCookie();
@@ -42,7 +42,7 @@ namespace GamingEcommerce.MVC.Controllers
                 list.Add(new BasketItemViewModel
                 {
                     Color = color,
-                    ImageName = existingProduct.ProductColors.FirstOrDefault(x => x.Id == colorId).ProductColorImages[0].ImageName,
+                    ImageName = existingProduct.ProductColors.FirstOrDefault(x => x.Id == colorId)!.ProductColorImages[0].ImageName,
                     Name = existingProduct.Name,
                     ProductId = existingProduct.Id,
                     Price = existingProduct.Price,

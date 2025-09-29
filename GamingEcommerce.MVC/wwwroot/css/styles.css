@@ -21526,4 +21526,9 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
   }
 }
 
+.hide-loadMoreBtn {
+    display: none;
+    color: darkred;
+}
+
 /*# sourceMappingURL=styles.css.map */
