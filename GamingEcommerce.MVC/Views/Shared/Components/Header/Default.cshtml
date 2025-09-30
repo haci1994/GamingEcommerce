@@ -258,10 +258,24 @@
                                 </a>
                             </li>
                             <li class="nav-account">
-                                <a href="#login" data-bs-toggle="modal"
-                                   class="nav-icon-item align-items-center gap-10 text-white">
-                                    <i class="icon icon-account"></i> <span class="text">Login</span>
-                                </a>
+                                
+                                    @if (User.Identity!.IsAuthenticated)
+                                    {
+                                    <a asp-controller="account" asp-action="Index"
+                                       class="nav-icon-item align-items-center gap-10 text-white">
+                                        <i class="icon icon-account"></i>
+                                        <span class="text">@User.Identity.Name</span>
+                                    </a>
+                                    } else
+                                    {
+                                    <a asp-controller="account" asp-action="login"
+                                       class="nav-icon-item align-items-center gap-10 text-white">
+                                        <i class="icon icon-account"></i>
+                                        <span class="text">Login</span>
+                                    </a>
+                                    }
+                                    
+                               
                             </li>                            
                             <li class="nav-wishlist">
                                 <a href="wishlist.html"
