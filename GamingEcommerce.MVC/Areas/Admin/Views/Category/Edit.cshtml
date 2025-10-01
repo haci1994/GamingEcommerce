@@ -1,0 +1,145 @@
+﻿@model UpdateCategoryViewModel
+<style>
+    .upload-card {
+        border: 1px solid rgba(0,0,0,.08);
+     
+        padding: 18px;
+        background: #fff;
+        
+    }
+
+    .dropzone {
+        border: 2px dashed rgba(0,0,0,.15);
+        border-radius: 14px;
+        padding: 22px;
+        text-align: center;
+        cursor: pointer;
+        transition: .2s;
+        background: #fafafa;
+    }
+
+        .dropzone:hover {
+            border-color: rgba(0,0,0,.35);
+            background: #f6f6f6
+        }
+
+    .dz-icon {
+        font-size: 28px;
+        display: block;
+        margin-bottom: 8px;
+        opacity: .75
+    }
+
+    .preview {
+        display: none;
+        margin-top: 14px;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .preview img {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,.08);
+        }
+
+        .preview .name {
+            font-size: .95rem;
+            color: #333
+        }
+</style>
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Edit Category - <span class="text text-primary">@Model.Name</span></h4>
+                    <form class="forms-sample" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="exampleInputUsername1" >Name</label>
+                            <input asp-for="Name" class="form-control" id="exampleInputUsername1" placeholder="Username">
+                        </div>
+                        <div class="upload-card mb-4">
+                            <label class="form-label fw-semibold mb-2">📷 Change photo</label>
+
+                            <!-- real input (gizli) -->
+                            <input asp-for="Image" id="fileInput" type="file" accept="image/*" hidden>
+
+                            <!-- dropzone -->
+                            <div id="dropzone" class="dropzone">
+                                <span class="dz-icon">⬆️</span>
+                                <div class="text-muted mb-1">Drag & drop image here</div>
+                                <div><button type="button" id="chooseBtn" class="btn btn-sm btn-outline-secondary">Choose file</button></div>
+                                <small class="text-muted d-block mt-2">JPG, PNG, GIF • max 2MB</small>
+                            </div>
+
+                            <!-- preview -->
+                            <div id="preview" class="preview">
+                                <img id="previewImg" alt="preview">
+                                <div class="flex-grow-1">
+                                    <div class="name" id="fileName">No file chosen</div>
+                                    <button type="button" id="removeBtn" class="btn btn-sm btn-outline-danger mt-1">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <p>Current image</p>
+                            <img src="~/images/collections/@Model.ImageName" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                        <button class="btn btn-light" asp-action="Index" asp-controller="Category">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    (function(){
+      const input    = document.getElementById('fileInput');
+      const dz       = document.getElementById('dropzone');
+      const choose   = document.getElementById('chooseBtn');
+      const preview  = document.getElementById('preview');
+      const img      = document.getElementById('previewImg');
+      const nameEl   = document.getElementById('fileName');
+      const remove   = document.getElementById('removeBtn');
+
+      function showPreview(file){
+        if(!file) return;
+        if(!file.type.startsWith('image/')) return alert('Please choose an image file.');
+        if(file.size > 2*1024*1024) return alert('Max size is 2MB.');
+        nameEl.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = e => { img.src = e.target.result; preview.style.display = 'flex'; };
+        reader.readAsDataURL(file);
+      }
+
+      choose.addEventListener('click', () => input.click());
+      dz.addEventListener('click', () => input.click());
+
+      input.addEventListener('change', e => showPreview(e.target.files[0]));
+
+      dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.borderColor = '#0d6efd'; });
+      dz.addEventListener('dragleave', () => dz.style.borderColor = 'rgba(0,0,0,.15)');
+      dz.addEventListener('drop', e => {
+        e.preventDefault(); dz.style.borderColor = 'rgba(0,0,0,.15)';
+        if(e.dataTransfer.files && e.dataTransfer.files[0]){
+          input.files = e.dataTransfer.files; // form post üçün vacib
+          showPreview(e.dataTransfer.files[0]);
+        }
+      });
+
+      remove.addEventListener('click', () => {
+        input.value = '';
+        img.src = '';
+        preview.style.display = 'none';
+        nameEl.textContent = 'No file chosen';
+      });
+    })();
+</script>

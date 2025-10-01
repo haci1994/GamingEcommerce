@@ -1,0 +1,49 @@
+﻿@{
+    AdminCategoryIndexViewModel model = Model;
+    var categories = model.Categories;
+}
+
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Manage Categories</h4>
+
+                <a class="btn btn-primary">Add a category</a>
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var category in categories) {
+                                <tr>
+                                    <td><img src="~/images/collections/@category.ImageName"/></td>
+                                    <td>@category.Name</td>
+                                    <td>
+                                         @if (category.IsDeleted)
+                                        {
+                                            <a class="btn btn-outline-info">Restore</a>
+                                        } else
+                                        {
+                                            <a class="btn btn-success">See Products</a>
+                                        <a class="btn btn-warning" asp-action="Edit" asp-controller="Category" asp-route-id="@category.Id">Edit</a>
+                                       
+                                            <a class="btn btn-danger">Delete</a>
+                                        }
+                                        
+                                    </td>
+                                </tr>       
+                            }                     
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div
+</div>

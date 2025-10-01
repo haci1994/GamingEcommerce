@@ -27,7 +27,16 @@ namespace GamingEcommerce.MVC
 
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
                 options.Lockout.MaxFailedAccessAttempts = 3;
-            }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            })
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
+            //builder.Services.ConfigureApplicationCookie(opt =>
+            //{
+            //    opt.LoginPath = "/Account/Login";
+            //    opt.AccessDeniedPath = "/Account/AccessDenied";
+            //});
+
 
             var app = builder.Build();
 
@@ -50,7 +59,13 @@ namespace GamingEcommerce.MVC
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
+              );
 
             app.MapControllerRoute(
                 name: "default",

@@ -17,6 +17,8 @@ namespace GamingEcommerce.BLL.Mapping
             CreateMap<Category, CreateCategoryViewModel>().ReverseMap();
             CreateMap<Category, UpdateCategoryViewModel>().ReverseMap();
 
+            CreateMap<CategoryViewModel, UpdateCategoryViewModel>().ReverseMap();
+
             CreateMap<DiscountCode, DiscountCodeViewModel>().ReverseMap();
             CreateMap<DiscountCode, CreateDiscountCodeViewModel>().ReverseMap();
             CreateMap<DiscountCode, UpdateDiscountCodeViewModel>().ReverseMap();

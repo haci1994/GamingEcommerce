@@ -44,6 +44,7 @@ namespace GamingEcommerce.BLL
             services.AddScoped<ISocialService, SocialViewService>();
             services.AddScoped<IWishlistItemService, WishlistItemService>();
             services.AddScoped<HomeLayoutService>();
+            services.AddScoped<AdminCategoryService>();
 
             return services;
         }

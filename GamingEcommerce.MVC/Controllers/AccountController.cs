@@ -1,28 +1,44 @@
 ﻿using GamingEcommerce.BLL.ViewModels.WebsiteViewModels;
 using GamingEcommerce.DAL.DataContext.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.FlowAnalysis;
 using System.Drawing.Printing;
-using System.Web.Mvc;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
 namespace GamingEcommerce.MVC.Controllers
 {
+    
     public class AccountController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
+
+        [Authorize(Roles ="Client")]
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Index", "Home");
+        } 
 
         public IActionResult Login()
         {
-
             return View();
         }
 
@@ -48,6 +64,11 @@ namespace GamingEcommerce.MVC.Controllers
                 return View(model);
             }
 
+            if (!string.IsNullOrEmpty(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -62,7 +83,7 @@ namespace GamingEcommerce.MVC.Controllers
             if(!ModelState.IsValid)
             {
                 return View(model);
-            }
+            }            
 
             var user = new AppUser
             {
@@ -70,7 +91,10 @@ namespace GamingEcommerce.MVC.Controllers
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
+                
             };
+
+            
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -84,7 +108,11 @@ namespace GamingEcommerce.MVC.Controllers
                 return View(model);
             }
 
+            var roleResult = await _roleManager.CreateAsync(new IdentityRole { Name = "Client" });
 
+            
+            await _userManager.AddToRoleAsync(user, "Client");
+            
             return RedirectToAction("Login","Account");
         }
     }
