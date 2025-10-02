@@ -53,7 +53,7 @@ namespace GamingEcommerce.BLL.Services.WebsiteServices
 
             //Categories
 
-            var categories = await _categoryService.GetAllAsync();
+            var categories = await _categoryService.GetAllAsync(predicate: x=> !x.IsDeleted);
 
             if (categories == null || !categories.Any())
             {

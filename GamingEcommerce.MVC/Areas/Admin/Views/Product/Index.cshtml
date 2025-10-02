@@ -1,0 +1,55 @@
+﻿@model List<ProductViewModel>
+
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Manage Products</h4>
+
+                <a class="btn btn-primary" asp-action="Create" asp-controller="Product">Add a product</a>
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var product in Model) {
+                                <tr>
+                                    <td><img src="~/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName"/></td>
+                                    <td>@product.Name</td>
+                                    @if(product.DiscountPrice>0)
+                                    {
+                                        <td><span style="text-decoration: line-through">@product.Price</span> - @product.DiscountPrice</td>
+                                    } else
+                                    {
+                                        <td>@product.Price</td>
+                                    }
+                                    
+                                    <td>
+                                         @if (product.IsDeleted)
+                                        {
+                                            <a class="btn btn-outline-info" asp-action="Restore" asp-controller="Product" asp-route-id="@product.Id">Restore</a>
+                                        } else
+                                        {
+                                            <a class="btn btn-success">See Details</a>
+                                        <a class="btn btn-warning" asp-action="Edit" asp-controller="Product" asp-route-id="@product.Id">Edit</a>
+                                       
+                                            <a class="btn btn-danger" asp-action="Delete" asp-controller="Product" asp-route-id="@product.Id">Delete</a>
+                                        }
+                                        
+                                    </td>
+                                </tr>       
+                            }                     
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div
+</div>

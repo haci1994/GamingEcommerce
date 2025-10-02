@@ -22,7 +22,8 @@ namespace GamingEcommerce.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var categories = await _categoryService.GetAllAsync();
-            var products = await _productService.GetAllAsync(include:
+            var products = await _productService.GetAllAsync(predicate: x => !x.IsDeleted,
+                include:
                 x => x.Include(z => z.ProductColors)
                     .ThenInclude(h=> h.ProductColorImages)
                 .Include(z=> z.ProductColors).ThenInclude(h=> h.ProductSizes));

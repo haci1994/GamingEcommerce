@@ -1,11 +1,9 @@
-﻿@model UpdateCategoryViewModel
+﻿@model CreateCategoryViewModel
 <style>
     .upload-card {
         border: 1px solid rgba(0,0,0,.08);
-     
         padding: 18px;
         background: #fff;
-        
     }
 
     .dropzone {
@@ -56,11 +54,12 @@
         <div class="col-md-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Edit Category - <span class="text text-primary">@Model.Name</span></h4>
+                    <h4 class="card-title">Create A Category</h4>
                     <form class="forms-sample" method="post" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label for="exampleInputUsername1" >Name</label>
-                            <input asp-for="Name" class="form-control" id="exampleInputUsername1" placeholder="Username">
+                            <label for="exampleInputUsername1">Name</label>
+                            <input asp-for="Name" class="form-control" id="exampleInputUsername1" placeholder="Category Name">
+                            <span asp-validation-for="Name" class="text text-small text-danger"></span>
                         </div>
                         <div class="upload-card mb-4">
                             <label class="form-label fw-semibold mb-2">📷 Change photo</label>
@@ -84,13 +83,10 @@
                                     <button type="button" id="removeBtn" class="btn btn-sm btn-outline-danger mt-1">Remove</button>
                                 </div>
                             </div>
+                            <span asp-validation-for="Image" class="text text-small text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <p>Current image</p>
-                            <img src="~/images/collections/@Model.ImageName" width="200" />
-                        </div>
-
-                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                        
+                        <button type="submit" class="btn btn-primary mr-2">Create</button>
                         <button class="btn btn-light" asp-action="Index" asp-controller="Category">Cancel</button>
                     </form>
                 </div>

@@ -9,7 +9,7 @@
             <div class="card-body">
                 <h4 class="card-title">Manage Categories</h4>
 
-                <a class="btn btn-primary">Add a category</a>
+                <a class="btn btn-primary" asp-action="Create" asp-controller="Category">Add a category</a>
                 
                 <div class="table-responsive">
                     <table class="table">
@@ -28,13 +28,13 @@
                                     <td>
                                          @if (category.IsDeleted)
                                         {
-                                            <a class="btn btn-outline-info">Restore</a>
+                                            <a class="btn btn-outline-info" asp-action="Restore" asp-controller="Category" asp-route-id="@category.Id">Restore</a>
                                         } else
                                         {
                                             <a class="btn btn-success">See Products</a>
                                         <a class="btn btn-warning" asp-action="Edit" asp-controller="Category" asp-route-id="@category.Id">Edit</a>
                                        
-                                            <a class="btn btn-danger">Delete</a>
+                                            <a class="btn btn-danger" asp-action="Delete" asp-controller="Category" asp-route-id="@category.Id">Delete</a>
                                         }
                                         
                                     </td>

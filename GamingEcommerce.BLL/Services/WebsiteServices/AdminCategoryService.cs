@@ -33,5 +33,7 @@ namespace GamingEcommerce.BLL.Services.WebsiteServices
 
             return _mapper.Map<UpdateCategoryViewModel>(category);
         }
+
+        
     }
 }

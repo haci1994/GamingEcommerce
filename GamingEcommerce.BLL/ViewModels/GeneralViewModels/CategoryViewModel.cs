@@ -16,6 +16,9 @@ namespace GamingEcommerce.BLL.ViewModels.GeneralViewModels
 
     public class CreateCategoryViewModel
     {
+        public string Name { get; set; } = null!;
+        public string? ImageName { get; set; }
+        public IFormFile Image { get; set; } = null!;
     }
 
     public class UpdateCategoryViewModel
@@ -24,5 +27,6 @@ namespace GamingEcommerce.BLL.ViewModels.GeneralViewModels
         public string? Name { get; set; }
         public string? ImageName { get; set; }
         public IFormFile? Image {  get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

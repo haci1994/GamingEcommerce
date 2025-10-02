@@ -18,6 +18,7 @@ namespace GamingEcommerce.BLL.Mapping
             CreateMap<Category, UpdateCategoryViewModel>().ReverseMap();
 
             CreateMap<CategoryViewModel, UpdateCategoryViewModel>().ReverseMap();
+            CreateMap<CategoryViewModel, CreateCategoryViewModel>().ReverseMap();
 
             CreateMap<DiscountCode, DiscountCodeViewModel>().ReverseMap();
             CreateMap<DiscountCode, CreateDiscountCodeViewModel>().ReverseMap();
@@ -47,14 +48,20 @@ namespace GamingEcommerce.BLL.Mapping
             CreateMap<ProductColor, CreateProductColorViewModel>().ReverseMap();
             CreateMap<ProductColor, UpdateProductColorViewModel>().ReverseMap();
 
+            CreateMap<CreateProductColorViewModel, ProductColorViewModel>().ReverseMap();
+
             CreateMap<ProductSize, ProductSizeViewModel>().ReverseMap();
+            CreateMap<CreateProductSizeViewModel, ProductSizeViewModel>().ReverseMap();
             CreateMap<ProductSize, CreateProductSizeViewModel>().ReverseMap();
             CreateMap<ProductSize, UpdateProductSizeViewModel>().ReverseMap();
 
             CreateMap<Product, ProductViewModel>().ReverseMap();
             CreateMap<Product, CreateProductViewModel>().ReverseMap();
             CreateMap<Product, UpdateProductViewModel>().ReverseMap();
-            
+
+            CreateMap<UpdateProductViewModel, ProductViewModel>().ReverseMap();
+            CreateMap<CreateProductViewModel, ProductViewModel>().ReverseMap();
+
             CreateMap<Social, SocialViewModel>().ReverseMap();
             CreateMap<Social, CreateSocialViewModel>().ReverseMap();
             CreateMap<Social, UpdateSocialViewModel>().ReverseMap();

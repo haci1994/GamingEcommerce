@@ -36,7 +36,7 @@ namespace GamingEcommerce.DAL.DataContext.Repositories
         public async Task<List<Product>> GetHotDealsAsync(int count)
         {
             var list = DbContext.Products
-                .Where(p => p.DiscountPrice > 0)
+                .Where(p => p.DiscountPrice > 0 && !p.IsDeleted)
                 .OrderBy(p => p.CreatedAt) // Stoka çoxdan artırılan məhsullar görünsün birinci
                 .Take(count)
                 .Include(x => x.ProductColors).ThenInclude(z => z.ProductSizes)
@@ -55,6 +55,7 @@ namespace GamingEcommerce.DAL.DataContext.Repositories
         public async Task<List<Product>> GetPopularProductsAsync(int count)
         {
             var list = DbContext.Products
+                .Where(p=>!p.IsDeleted)
                 .OrderByDescending(p => p.ViewCount)
                 .Take(count)
                 .Include(x => x.ProductColors).ThenInclude(z => z.ProductSizes)
@@ -73,6 +74,7 @@ namespace GamingEcommerce.DAL.DataContext.Repositories
         public async Task<List<Product>> GetRecommendedProductsAsync(int count)
         {
             var recommendedProductIds = await DbContext.OrderItems
+                .Where(p => !p.IsDeleted)
                 .GroupBy(o => o.ProductId)
                 .OrderByDescending(g => g.Count())
                 .Select(g => g.Key)
@@ -80,7 +82,7 @@ namespace GamingEcommerce.DAL.DataContext.Repositories
                 .ToListAsync();
 
             var products = await DbContext.Products
-             .Where(p => recommendedProductIds.Contains(p.Id))
+             .Where(p => recommendedProductIds.Contains(p.Id) && !p.IsDeleted)
              .Include(x => x.ProductColors).ThenInclude(z => z.ProductSizes)
              .Include(x => x.ProductColors).ThenInclude(z => z.ProductColorImages)
              .ToListAsync();

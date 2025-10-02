@@ -9,6 +9,8 @@ namespace GamingEcommerce.BLL.Services.Contracts
         Task<List<ProductViewModel>> GetHotDealsAsync(int count);
         Task<List<ProductViewModel>> GetPopularProductsAsync(int count);
         Task<List<ProductViewModel>> GetRecommendedProductsAsync(int count);
-        
+        Task<CreateProductViewModel> GetCreateProductModelAsync();
+
+
     }
 }

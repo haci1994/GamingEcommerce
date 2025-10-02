@@ -23,7 +23,7 @@ namespace GamingEcommerce.BLL.Services.GeneralServices
             var mappedEntity = _mapper.Map<TEntity>(entity);
             await Repository.AddAsync(mappedEntity);
 
-            return _mapper.Map<TViewModel>(entity);
+            return _mapper.Map<TViewModel>(mappedEntity);
         }
 
         public async Task<bool> DeleteAsync(int id)

@@ -1,0 +1,331 @@
+﻿@* @model CreateProductViewModel
+
+<div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Create a product</h4>
+                  <p class="card-description">
+                    Basic form layout
+                  </p>
+                  <form class="forms-sample" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                      <label for="name">Product Name</label>
+                      <input asp-for="@Model.Name" class="form-control" id="name" placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                      <label for="description">Product Description</label>
+                      <input asp-for="@Model.Description" class="form-control" id="description" placeholder="Description">
+                    </div>
+                    <div class="form-group">
+                      <label for="price">Product Price</label>
+                      <input asp-for="@Model.Price" class="form-control" id="price" placeholder="Price">
+                    </div>
+                    <div class="form-group">
+                      <label for="disprice">Discount Price</label>
+                      <input asp-for="@Model.Price" class="form-control" id="disprice" placeholder="Discount Price" value="0">
+                    </div>
+                    <div class="form-group">
+                      <label for="disprice">Category</label>
+                      <select asp-for="@Model.CategoryId" asp-items="@Model.CategoryList" class="form-control"></select>
+                    </div>
+                    <div class="form-group">
+                      <label for="info">Additional Information</label>
+                      <input asp-for="@Model.AdditionalInformation" class="form-control" id="info" placeholder="Additional information">
+                    </div>
+
+                     <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button class="btn btn-light">Cancel</button>
+                  </form>
+                </div>
+              </div>
+            </div
+          </div>
+        </div> *@
+
+
+@model CreateProductViewModel
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Create a Product</h4>
+
+                    <form class="forms-sample" method="post" enctype="multipart/form-data" asp-action="Create">
+
+                        @* ------------ Base product fields ------------ *@
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label">Product Name</label>
+                                <input asp-for="Name" class="form-control" placeholder="Name" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label asp-for="Price" class="form-label">Price</label>
+                                <input asp-for="Price" class="form-control" placeholder="0.00" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label asp-for="DiscountPrice" class="form-label">Discount Price</label>
+                                <input asp-for="DiscountPrice" class="form-control" placeholder="0.00" value="0" />
+                                <span asp-validation-for="DiscountPrice" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="CategoryId" class="form-label">Category</label>
+                                <select asp-for="CategoryId" asp-items="Model.CategoryList" class="form-control">
+                                    <option value="">-- choose category --</option>
+                                </select>
+                                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label">Description</label>
+                                <textarea asp-for="Description" class="form-control" rows="2" placeholder="Short description"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="AdditionalInformation" class="form-label">Additional Information</label>
+                                <textarea asp-for="AdditionalInformation" class="form-control" rows="2" placeholder="Extra info"></textarea>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        @* ------------ Colors (dynamic) ------------ *@
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h5 class="mb-0">Colors</h5>
+                            <button type="button" class="btn btn-sm btn-primary" id="addColorBtn">+ Add Color</button>
+                        </div>
+
+                        <div id="colorsContainer" class="vstack gap-3">
+                            @* İlk rəng bloku (index 0) – boş halda *@
+                            <div class="card p-3 color-item" data-index="0">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div class="fw-semibold">Color #<span class="color-idx">1</span></div>
+                                    <button type="button" class="btn btn-sm btn-outline-danger remove-color">Remove</button>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Color Name</label>
+                                        <input name="ProductColors[0].Name" class="form-control" placeholder="e.g. Black" />
+                                        <span></span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Hex Code</label>
+                                        <div class="input-group">
+                                            <input name="ProductColors[0].HexCode" class="form-control" placeholder="#000000" />
+                                            <input type="color" class="form-control form-control-color" value="#000000"
+                                                   oninput="this.previousElementSibling.value=this.value" title="Pick color">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Images</label>
+                                        <input name="ProductColors[0].Images" type="file" class="form-control" accept="image/*" multiple />
+                                        <div class="form-text">JPG/PNG, max 2MB each</div>
+                                    </div>
+                                </div>
+
+                                @* Sizes table *@
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="fw-semibold">Sizes</div>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary add-size">+ Add Size</button>
+                                    </div>
+
+                                    <div class="table-responsive mt-2">
+                                        <table class="table table-sm align-middle mb-0 sizes-table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:55%">Name</th>
+                                                    <th style="width:35%">Stock</th>
+                                                    <th style="width:10%"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <input name="ProductColors[0].Sizes[0].Name" class="form-control" placeholder="e.g. XL" />
+                                                    </td>
+                                                    <td>
+                                                        <input name="ProductColors[0].Sizes[0].Stock" class="form-control" type="number" min="0" value="0" />
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger remove-size">✕</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div asp-validation-summary="All"></div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary me-2">Create</button>
+                            <a asp-action="Index" asp-controller="Product" class="btn btn-light">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* -------- Templates (hidden) -------- *@
+<script type="text/template" id="colorTemplate">
+    <div class="card p-3 color-item" data-index="__idx__">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="fw-semibold">Color #<span class="color-idx">__shownum__</span></div>
+        <button type="button" class="btn btn-sm btn-outline-danger remove-color">Remove</button>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Color Name</label>
+          <input name="ProductColors[__idx__].Name" class="form-control" placeholder="e.g. Black" />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Hex Code</label>
+          <div class="input-group">
+            <input name="ProductColors[__idx__].HexCode" class="form-control" placeholder="#000000" />
+            <input type="color" class="form-control form-control-color" value="#000000"
+                   oninput="this.previousElementSibling.value=this.value" title="Pick color">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Images</label>
+          <input name="ProductColors[__idx__].Images" type="file" class="form-control" accept="image/*" multiple />
+          <div class="form-text">JPG/PNG, max 2MB each</div>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="fw-semibold">Sizes</div>
+          <button type="button" class="btn btn-sm btn-outline-secondary add-size">+ Add Size</button>
+        </div>
+
+        <div class="table-responsive mt-2">
+          <table class="table table-sm align-middle mb-0 sizes-table">
+            <thead>
+              <tr>
+                <th style="width:55%">Name</th>
+                <th style="width:35%">Stock</th>
+                <th style="width:10%"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input name="ProductColors[__idx__].Sizes[0].Name" class="form-control" placeholder="e.g. XL" /></td>
+                <td><input name="ProductColors[__idx__].Sizes[0].Stock" class="form-control" type="number" min="0" value="0" /></td>
+                <td class="text-end"><button type="button" class="btn btn-sm btn-outline-danger remove-size">✕</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+</script>
+
+<script type="text/template" id="sizeRowTemplate">
+    <tr>
+      <td><input name="ProductColors[__cidx__].Sizes[__sidx__].Name" class="form-control" placeholder="e.g. XL" /></td>
+      <td><input name="ProductColors[__cidx__].Sizes[__sidx__].Stock" class="form-control" type="number" min="0" value="0" /></td>
+      <td class="text-end"><button type="button" class="btn btn-sm btn-outline-danger remove-size">✕</button></td>
+    </tr>
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+          const colorsContainer = document.getElementById('colorsContainer');
+          const addColorBtn = document.getElementById('addColorBtn');
+          const colorTpl = document.getElementById('colorTemplate').textContent;
+          const sizeTpl = document.getElementById('sizeRowTemplate').textContent;
+
+          // Helper: re-number visible badges (Color #1, #2, …)
+          function renumber() {
+            [...colorsContainer.querySelectorAll('.color-item')].forEach((card, i) => {
+              card.querySelector('.color-idx').textContent = (i + 1);
+              card.dataset.index = i;
+              // reindex all inputs inside the color
+              [...card.querySelectorAll('input, select, textarea')].forEach(inp => {
+                inp.name = inp.name
+                  .replace(/ProductColors\[\d+\]/g, `ProductColors[${i}]`)
+                  .replace(/ProductColors\[\d+\]\.Sizes\[\d+\]/g, (m) => m.replace(/\d+\](?=.*\.)/, `${i}]`));
+              });
+              // reindex sizes rows
+              const rows = card.querySelectorAll('.sizes-table tbody tr');
+              rows.forEach((row, sidx) => {
+                [...row.querySelectorAll('input')].forEach(inp => {
+                  inp.name = inp.name.replace(/Sizes\[\d+\]/g, `Sizes[${sidx}]`);
+                });
+              });
+            });
+          }
+
+          addColorBtn.addEventListener('click', () => {
+            const idx = colorsContainer.querySelectorAll('.color-item').length;
+            const html = colorTpl
+              .replace(/__idx__/g, idx)
+              .replace(/__shownum__/g, idx + 1);
+            colorsContainer.insertAdjacentHTML('beforeend', html);
+          });
+
+          // delegate remove color + add/remove size
+          colorsContainer.addEventListener('click', (e) => {
+            // remove color
+            if (e.target.closest('.remove-color')) {
+              e.preventDefault();
+              const card = e.target.closest('.color-item');
+              card.remove();
+              renumber();
+              return;
+            }
+
+            // add size
+            if (e.target.closest('.add-size')) {
+              e.preventDefault();
+              const card = e.target.closest('.color-item');
+              const cidx = [...colorsContainer.querySelectorAll('.color-item')].indexOf(card);
+              const tbody = card.querySelector('.sizes-table tbody');
+              const sidx = tbody.querySelectorAll('tr').length;
+              const row = sizeTpl
+                .replace(/__cidx__/g, cidx)
+                .replace(/__sidx__/g, sidx);
+              tbody.insertAdjacentHTML('beforeend', row);
+              return;
+            }
+
+            // remove size
+            if (e.target.closest('.remove-size')) {
+              e.preventDefault();
+              const row = e.target.closest('tr');
+              const tbody = row.parentElement;
+              row.remove();
+              // reindex sizes in this color only
+              const card = e.target.closest('.color-item');
+              const rows = card.querySelectorAll('.sizes-table tbody tr');
+              rows.forEach((r, i) => {
+                [...r.querySelectorAll('input')].forEach(inp => {
+                  inp.name = inp.name.replace(/Sizes\[\d+\]/g, `Sizes[${i}]`);
+                });
+              });
+              return;
+            }
+          });
+        })();
+    </script>
+}
