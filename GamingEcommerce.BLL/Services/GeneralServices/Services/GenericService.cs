@@ -18,7 +18,7 @@ namespace GamingEcommerce.BLL.Services.GeneralServices
             _mapper = mapper;
         }
 
-        public async Task<TViewModel> AddAsync(TCreateViewModel entity)
+        public virtual async Task<TViewModel> AddAsync(TCreateViewModel entity)
         {
             var mappedEntity = _mapper.Map<TEntity>(entity);
             await Repository.AddAsync(mappedEntity);

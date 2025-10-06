@@ -8,7 +8,7 @@ namespace GamingEcommerce.BLL.ViewModels.GeneralViewModels
         public string Name { get; set; } = null!;
         public string? HexCode { get; set; }
         public List<ProductColorImageViewModel> ProductColorImages { get; set; } = new();
-        public List<ProductSizeViewModel> Sizes { get; set; } = new();
+        public List<ProductSizeViewModel> ProductSizes { get; set; } = new();        
     }
 
     public class CreateProductColorViewModel
@@ -27,6 +27,7 @@ namespace GamingEcommerce.BLL.ViewModels.GeneralViewModels
         public string? HexCode { get; set; }
         public List<IFormFile>? NewImages { get; set; } // yeni şəkillər
         public List<ProductSizeViewModel> Sizes { get; set; } = new();
+        public List<ProductColorImageViewModel> Images { get; set; } = new();
     }
 
 }

@@ -19,6 +19,7 @@ namespace GamingEcommerce.BLL.ViewModels.GeneralViewModels
 
         // Nested collections
         public List<ProductColorViewModel> ProductColors { get; set; } = new();
+        
     }
 
     public class CreateProductViewModel
@@ -49,7 +50,9 @@ namespace GamingEcommerce.BLL.ViewModels.GeneralViewModels
 
         public int CategoryId { get; set; }
         public string? CategoryName { get; set; }
+        public List<SelectListItem> CategoryList { get; set; } = new();
 
-        public List<UpdateProductColorViewModel> ProductColors { get; set; } = new();
+        public List<ProductColorViewModel> ProductColors { get; set; } = new();
+        public List<ProductSizeViewModel> ProductSizes { get; set; } = new();
     }
 }

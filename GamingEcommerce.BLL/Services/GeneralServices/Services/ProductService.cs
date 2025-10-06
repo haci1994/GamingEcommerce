@@ -4,6 +4,7 @@ using GamingEcommerce.BLL.ViewModels.GeneralViewModels;
 using GamingEcommerce.DAL.DataContext.Contracts;
 using GamingEcommerce.DAL.DataContext.Entities;
 using GamingEcommerce.DAL.DataContext.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
@@ -91,5 +92,47 @@ namespace GamingEcommerce.BLL.Services.GeneralServices
 
             return productModel;
         }
+
+        public override async Task<ProductViewModel> AddAsync(CreateProductViewModel model)
+        {
+            var product = _mapper.Map<Product>(model);
+            await Repository.AddAsync(product);
+            return _mapper.Map<ProductViewModel>(product);
+        }
+
+        public async Task<UpdateProductViewModel> GetUpdateProductModelAsync(int id)
+        {
+            var categories = await _categoryService.GetAllAsync(predicate: x => !x.IsDeleted);
+
+            var selectList = new List<SelectListItem>();
+
+            foreach (var category in categories)
+            {
+                var option = new SelectListItem { Text = category.Name, Value = category.Id.ToString() };
+                selectList.Add(option);
+            }
+
+            var product = await GetByIdAsync(id);
+
+            if (product == null) return null!;
+
+            var productModel = new UpdateProductViewModel
+            {
+                CategoryList = selectList,
+                Id = id,
+                Name = product!.Name,
+                AdditionalInformation = product.AdditionalInformation,
+                CategoryId = product.CategoryId,
+                CategoryName = product.CategoryName,
+                Description = product.Description,
+                DiscountPrice = product.DiscountPrice,
+                Price = product.Price,
+                ViewCount = product.ViewCount,
+                ProductColors = product.ProductColors
+            };
+
+            return productModel;
+        }
+
     }
 }

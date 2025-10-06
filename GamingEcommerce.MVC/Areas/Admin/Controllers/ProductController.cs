@@ -4,6 +4,7 @@ using GamingEcommerce.BLL.Services.GeneralServices;
 using GamingEcommerce.BLL.ViewModels.GeneralViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace GamingEcommerce.MVC.Areas.Admin.Controllers
@@ -17,8 +18,9 @@ namespace GamingEcommerce.MVC.Areas.Admin.Controllers
         private readonly IProductColorImageService _productColorImageService;
         private readonly IProductSizeService _productSizeService;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ICategoryService _categoryService;
 
-        public ProductController(IProductService productService, IMapper mapper, IProductColorService productColorService, IProductColorImageService productColorImageService, IProductSizeService productSizeService, IWebHostEnvironment webHostEnvironment)
+        public ProductController(IProductService productService, IMapper mapper, IProductColorService productColorService, IProductColorImageService productColorImageService, IProductSizeService productSizeService, IWebHostEnvironment webHostEnvironment, ICategoryService categoryService)
         {
             _productService = productService;
             _mapper = mapper;
@@ -26,6 +28,7 @@ namespace GamingEcommerce.MVC.Areas.Admin.Controllers
             _productColorImageService = productColorImageService;
             _productSizeService = productSizeService;
             _webHostEnvironment = webHostEnvironment;
+            _categoryService = categoryService;
         }
 
         public async Task<IActionResult> Index()
@@ -49,85 +52,58 @@ namespace GamingEcommerce.MVC.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Error Adding Product");
+                var categories = await _categoryService.GetAllAsync(predicate: x => !x.IsDeleted);
+
+                var selectList = new List<SelectListItem>();
+
+                foreach (var category in categories)
+                {
+                    var option = new SelectListItem { Text = category.Name, Value = category.Id.ToString() };
+                    selectList.Add(option);
+                }
+
+                model.CategoryList = selectList;
+
+                return View(model);
+            }
+            var existProduct = await _productService.GetAsync(x => x.Name.ToLower() == model.Name.ToLower(), asnotracking: true);
+            if (existProduct != null)
+            {
+                ModelState.AddModelError("Name", "Product with this name already exists.");
+
+                var categories = await _categoryService.GetAllAsync(predicate: x => !x.IsDeleted);
+
+                var selectList = new List<SelectListItem>();
+
+                foreach (var category in categories)
+                {
+                    var option = new SelectListItem { Text = category.Name, Value = category.Id.ToString() };
+                    selectList.Add(option);
+                }
+
+                model.CategoryList = selectList;
+
                 return View(model);
             }
 
-            // Əsas product-u yarat
-            var productVm = await _productService.AddAsync(model); // GenericService-dən
-            var productId = productVm.Id;
+            var createdProduct = await _productService.AddAsync(model);
 
-            // Əgər rənglər boşdursa, hazırdır
-            if (model.ProductColors == null || model.ProductColors.Count == 0)
-                return RedirectToAction("Index", "Product");
-
-            foreach (var c in model.ProductColors)
+            if (createdProduct == null)
             {
-                // Rəngi yarat
-                var colorVm = await _productColorService.AddAsync(new CreateProductColorViewModel
+                var categories = await _categoryService.GetAllAsync(predicate: x => !x.IsDeleted);
+
+                var selectList = new List<SelectListItem>();
+
+                foreach (var category in categories)
                 {
-                    ProductId = productId,
-                    Name = c.Name,
-                    HexCode = c.HexCode
-                });
-                var colorId = colorVm.Id;
-
-                // şəkillər üçün folder
-                var folder = Path.Combine(_webHostEnvironment.WebRootPath,
-                                          "images", "products",
-                                          productId.ToString(),
-                                          colorId.ToString());
-                Directory.CreateDirectory(folder);
-
-                // Şəkillər
-                if (c.Images != null)
-                {
-                    foreach (var file in c.Images)
-                    {
-                        if (file == null || file.Length == 0) continue;
-                        if (!file.ContentType.StartsWith("image/"))
-                        {
-                            ModelState.AddModelError("", "Only image files are allowed.");
-                            return View(model);
-                        }
-                        if (file.Length > 2 * 1024 * 1024)
-                        {
-                            ModelState.AddModelError("", "Image must be ≤ 2MB.");
-                            return View(model);
-                        }
-
-                        var ext = Path.GetExtension(file.FileName);
-                        var fileName = $"{Guid.NewGuid():N}{ext}";
-                        var filePath = Path.Combine(folder, fileName);
-
-                        using (var fs = new FileStream(filePath, FileMode.Create))
-                            await file.CopyToAsync(fs);
-
-                        await _productColorImageService.AddAsync(new CreateProductColorImageViewModel
-                        {
-                            ProductColorId = colorId,
-                            ImageName = fileName
-                        });
-                    }
+                    var option = new SelectListItem { Text = category.Name, Value = category.Id.ToString() };
+                    selectList.Add(option);
                 }
 
-                // Ölçülər
-                if (c.Sizes != null)
-                {
-                    foreach (var s in c.Sizes)
-                    {
-                        if (string.IsNullOrWhiteSpace(s.Name)) continue;
+                model.CategoryList = selectList;
 
-                        await _productSizeService.AddAsync(new CreateProductSizeViewModel
-                        {
-                            ProductColorId = colorId,
-                            Name = s.Name.Trim(),
-                            Stock = Math.Max(0, s.Stock)
-                        });
-                    }
-                }
+                return View(model);
             }
-
             return RedirectToAction("Index", "Product");
         }
 
@@ -158,6 +134,12 @@ namespace GamingEcommerce.MVC.Areas.Admin.Controllers
             await _productService.UpdateAsync(updateProduct);
 
             return RedirectToAction("Index", "Product");
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var model  = await _productService.GetUpdateProductModelAsync(id);
+            return View(model);
         }
     }
 }

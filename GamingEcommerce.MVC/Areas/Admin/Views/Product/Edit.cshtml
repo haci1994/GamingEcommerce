@@ -1,0 +1,89 @@
+﻿@model UpdateProductViewModel
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Default form</h4>
+                    <p class="card-description">
+                        Adding a product
+                    </p>
+                    <form class="forms-sample" method="post" asp-action="Create">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input asp-for="Name" class="form-control" id="name" placeholder="Product Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="desc">Description</label>
+                            <input asp-for="Description" class="form-control" id="desc" placeholder="Description">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="category" style="display:block; font-weight:500; color:#343a40; margin-bottom:6px;">Select Category</label>
+                            <select asp-for="CategoryId" asp-items="@Model.CategoryList"
+                                    style="width:100%; padding:10px 12px; border:1px solid #f3f3f3; background-color:#fff; font-size:14px; line-height:1.5; outline:none; transition:border-color .15s ease-in-out, box-shadow .15s ease-in-out;">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="additionalinfo">Additional Info</label>
+                            <input asp-for="AdditionalInformation" class="form-control" id="additionalinfo" placeholder="Additional Info">
+                        </div>
+                        <div class="form-group">
+                            <label for="Price">Price</label>
+                            <input asp-for="Price" class="form-control" id="Price" placeholder="Price">
+                        </div>
+                        <div class="form-group">
+                            <label for="DiscountPrice">Discount Price</label>
+                            <input asp-for="DiscountPrice" class="form-control" id="DiscountPrice" placeholder="Discount Price">
+                        </div>
+                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                        <button class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">@Model.Name prduct variants</h4>
+                   <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Img</th>
+                                    <th>Color</th>
+                                    <th>Color Sizes and stock</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var color in Model.ProductColors)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (@color.ProductColorImages.Count>0)
+                                            {
+                                                <img src="~/images/products/@color.ProductColorImages[0].ImageName" />
+                                            } else
+                                            {
+                                                <img src="~/images/products/noimage.jpg" />
+                                            }
+
+                                        </td>
+                                        <td>@color.Name</td>
+                                        <td>@foreach (var size in color.ProductSizes ?? [])
+                                            {
+                                                <p class="badge badge-primary">@size.Name - @size.Stock x</p>
+                                            }
+                                        </td>
+                                        <td><a class="btn btn-warning">Edit</a> <a class="btn btn-danger">Delete</a></td>
+                                    </tr>
+                                }                         
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

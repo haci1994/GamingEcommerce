@@ -44,9 +44,12 @@ namespace GamingEcommerce.BLL.Mapping
             CreateMap<ProductColorImage, CreateProductColorImageViewModel>().ReverseMap();
             CreateMap<ProductColorImage, UpdateProductColorImageViewModel>().ReverseMap();
 
+            CreateMap<ProductColorImageViewModel, UpdateProductColorImageViewModel>().ReverseMap();
+
             CreateMap<ProductColor, ProductColorViewModel>().ReverseMap();
             CreateMap<ProductColor, CreateProductColorViewModel>().ReverseMap();
             CreateMap<ProductColor, UpdateProductColorViewModel>().ReverseMap();
+            CreateMap<ProductColorViewModel, UpdateProductColorViewModel>().ReverseMap();
 
             CreateMap<CreateProductColorViewModel, ProductColorViewModel>().ReverseMap();
 
