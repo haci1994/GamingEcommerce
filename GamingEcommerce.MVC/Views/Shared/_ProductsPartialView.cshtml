@@ -17,24 +17,7 @@
                 </a>
             </div>
             <ul class="tf-control-layout d-flex justify-content-center">
-                @* <li class="tf-view-layout-switch sw-layout-list list-layout" data-value-layout="list">
-                    <div class="item"><span class="icon icon-list"></span></div>
-                </li>
-                <li class="tf-view-layout-switch sw-layout-2" data-value-layout="tf-col-2">
-                    <div class="item"><span class="icon icon-grid-2"></span></div>
-                </li>
-                <li class="tf-view-layout-switch sw-layout-3" data-value-layout="tf-col-3">
-                    <div class="item"><span class="icon icon-grid-3"></span></div>
-                </li>
-                <li class="tf-view-layout-switch sw-layout-4 active" data-value-layout="tf-col-4">
-                    <div class="item"><span class="icon icon-grid-4"></span></div>
-                </li>
-                <li class="tf-view-layout-switch sw-layout-5" data-value-layout="tf-col-5">
-                    <div class="item"><span class="icon icon-grid-5"></span></div>
-                </li>
-                <li class="tf-view-layout-switch sw-layout-6" data-value-layout="tf-col-6">
-                    <div class="item"><span class="icon icon-grid-6"></span></div>
-                </li> *@
+                
             </ul>
             <div class="tf-control-sorting d-flex justify-content-end">
                 <div class="tf-dropdown-sort" data-bs-toggle="dropdown">
@@ -102,9 +85,9 @@
     </div>
 </section>
 
-<script>
+@* <script>
     let loadMoreBtn = document.getElementById("loadMoreBtn");
-    let skip = 1;
+    let skip = 2;
     let gridLayout = document.getElementById("gridLayout");
 
     loadMoreBtn.addEventListener('click', function()
@@ -112,7 +95,7 @@
         fetch(`/shop/loadmore?skip=${skip}`)
         .then(res => res.json())
         .then(products => {
-                skip++;
+                skip=skip+2;
                  if (!Array.isArray(products)) {
               console.warn("Gələn data array deyil:", products);
               return;
@@ -181,7 +164,144 @@
 
         
 })});
+</script> *@
+
+<script>
+    const gridLayout = document.getElementById("gridLayout");
+    const loadMoreBtn = document.getElementById("loadMoreBtn");
+    let skip = 2; // artıq ilk 2 məhsul serverdə render olunubsa
+
+    // ---- Helpers ----
+    const first = (arr) => (Array.isArray(arr) && arr.length ? arr[0] : null);
+
+    function firstColorImage(product, colorIndex = 0) {
+      const colors = product?.ProductColors || [];
+      const color = colors[colorIndex] || null;
+      const img = first(color?.ProductColorImages);
+      return img ? `/images/products/${img.ImageName}` : `/images/products/placeholder.jpg`;
+    }
+
+    function hoverImagesHtml(product) {
+      const colors = product?.ProductColors || [];
+      if (!colors.length) {
+        const src = firstColorImage(product, 0);
+        return `<img class="lazyload img-hover" data-src="${src}" src="${src}" alt="image-product">`;
+      }
+      let html = "";
+      // 1-ci rəngdən sonrakılar hover kimi
+      for (let i = 1; i < colors.length; i++) {
+        const src = firstColorImage(product, i);
+        html += `<img class="lazyload img-hover" data-src="${src}" src="${src}" alt="image-product">`;
+      }
+      // Yalnız 1 rəng varsa, hover üçün yenə eyni şəkli ver
+      if (colors.length === 1) {
+        const src = firstColorImage(product, 0);
+        html += `<img class="lazyload img-hover" data-src="${src}" src="${src}" alt="image-product">`;
+      }
+      return html;
+    }
+
+    function priceHtml(p) {
+      const hasDiscount = (p?.DiscountPrice ?? 0) > 0;
+      if (hasDiscount) {
+        return `
+          <span class="price current-price" style="text-decoration:line-through">$${p.Price}</span>
+          <span class="price current-price">$${p.DiscountPrice}</span>
+        `;
+      }
+      return `<span class="price current-price">$${p.Price}</span>`;
+    }
+
+    function colorSwatchesHtml(p) {
+      const colors = p?.ProductColors || [];
+      if (!colors.length) return "";
+      let html = "";
+
+      // Birinci rəng (active)
+      const c0 = colors[0];
+      const c0Img = firstColorImage(p, 0);
+      html += `
+        <li class="list-color-item color-swatch active">
+          <span class="tooltip">${c0?.Name ?? ""}</span>
+          <span class="swatch-value" style="background-color:#${c0?.HexCode ?? "000000"}"></span>
+          <img class="lazyload" data-src="${c0Img}" src="${c0Img}" alt="image-product">
+        </li>
+      `;
+
+      // Qalan rənglər
+      for (let i = 1; i < colors.length; i++) {
+        const ci = colors[i];
+        const ciImg = firstColorImage(p, i);
+        html += `
+          <li class="list-color-item color-swatch">
+            <span class="tooltip">${ci?.Name ?? ""}</span>
+            <span class="swatch-value" style="background-color:#${ci?.HexCode ?? "000000"}"></span>
+            <img class="lazyload" data-src="${ciImg}" src="${ciImg}" alt="image-product">
+          </li>
+        `;
+      }
+      return html;
+    }
+
+    function buildProductCard(product) {
+      const mainImg = firstColorImage(product, 0);
+      const firstColorId = product?.ProductColors?.[0]?.Id ?? 0;
+
+      return `
+        <div class="card-product grid" data-availability="In stock" data-brand="Ecomus">
+          <div class="card-product-wrapper">
+            <a href="product-detail.html" class="product-img">
+              <img class="lazyload img-product" data-src="${mainImg}" src="${mainImg}" alt="image-product">
+              ${hoverImagesHtml(product)}
+            </a>
+
+            <div class="list-product-btn absolute-2">
+              <a onclick="AddToCart(${product.Id},${firstColorId})" class="box-icon bg_white quick-add tf-btn-loading">
+                <span class="icon icon-bag"></span>
+                <span class="tooltip">Quick Add</span>
+              </a>
+              <a href="#" class="box-icon bg_white wishlist btn-icon-action">
+                <span class="icon icon-heart"></span>
+                <span class="tooltip">Add to Wishlist</span>
+                <span class="icon icon-delete"></span>
+              </a>
+            </div>
+          </div>
+
+          <div class="card-product-info">
+            <a href="product-detail.html" class="title link">${product.Name}</a>
+            ${priceHtml(product)}
+            <ul class="list-color-product">
+              ${colorSwatchesHtml(product)}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderProducts(products) {
+      const html = products.map(buildProductCard).join("");
+      gridLayout.insertAdjacentHTML("beforeend", html);
+    }
+
+    // ---- Load more ----
+    loadMoreBtn?.addEventListener("click", function () {
+      fetch(`/shop/loadmore?skip=${skip}`)
+        .then(res => res.json())
+        .then(products => {
+          if (!Array.isArray(products)) return;
+          renderProducts(products);
+          skip += products.length;
+
+          // serverdən ümumi say gəlirsə, onunla müqayisə et; səndə Razor var idi: @total
+          if (skip >= @total) {
+            loadMoreBtn.remove();
+          }
+        })
+        .catch(() => {});
+    });
 </script>
+
 
 <!-- /Section Product -->
 <!-- gotop -->

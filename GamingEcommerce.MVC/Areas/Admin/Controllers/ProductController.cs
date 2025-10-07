@@ -33,7 +33,7 @@ namespace GamingEcommerce.MVC.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var allProducts = await _productService.GetAllAsync(include: x=> x.Include(x=> x.ProductColors).ThenInclude(z=>z.ProductColorImages).Include(p => p.ProductColors)
+            var allProducts = await _productService.GetAllAsync(include: x => x.Include(x => x.ProductColors).ThenInclude(z => z.ProductColorImages).Include(p => p.ProductColors)
                 .ThenInclude(pc => pc.ProductSizes));
 
             return View(allProducts);
@@ -138,8 +138,99 @@ namespace GamingEcommerce.MVC.Areas.Admin.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var model  = await _productService.GetUpdateProductModelAsync(id);
+            var model = await _productService.GetUpdateProductModelAsync(id);
             return View(model);
+        }
+
+        public async Task<IActionResult> AddProductColor(int id)
+        {
+            var model = new CreateProductColorViewModel();
+            var product = await _productService.GetByIdAsync(id);
+
+            if (product == null) return NotFound();
+
+            model.ProductName = product.Name;
+            model.ProductId = id;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddProductColor(CreateProductColorViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Error");
+                return View(model);
+            }
+
+            if (model.ProductId <= 0) return BadRequest("Invalid product id.");
+
+            var product = await _productService.GetByIdAsync(model.ProductId);
+            if (product == null) return BadRequest();
+
+            foreach(var color in product.ProductColors)
+            {
+                if(color.Name == model.Name || color.HexCode == model.HexCode)
+                {
+                    ModelState.AddModelError("", "Color is exist!");
+                    return View(model);
+                }
+            }
+
+            foreach(var image in model.Images)
+            {
+                if (!image.ContentType.StartsWith("image/"))
+                {
+                    ModelState.AddModelError("", "Select ImageFile");
+                    return View(model);
+                }
+
+                if (image.Length > 1024 * 1024 * 2)
+                {
+                    ModelState.AddModelError("", "Selected image size is larger than 2 MB!");
+                    return View(model);
+                }
+            }
+
+            foreach (var image in model.Images)
+            {
+                var path = Path.Combine(_webHostEnvironment.WebRootPath, "images", "products");
+                var imageName = $"{Path.GetFileNameWithoutExtension(image.FileName)}-{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+                var totalpath = Path.Combine(path, imageName);
+
+                var fs = new FileStream(totalpath, FileMode.Create);
+
+                await image.CopyToAsync(fs);
+                fs.Close();
+
+                model.ProductColorImages.Add(new CreateProductColorImageViewModel { ImageName=imageName});
+            }
+
+            var listSizes = new List<CreateProductSizeViewModel>();
+
+            foreach (var size in model.Sizes)
+            {
+                var newSize = new CreateProductSizeViewModel
+                {
+                    Name = size
+                };
+                listSizes.Add(newSize);
+            }
+
+            var newProductColor = new CreateProductColorViewModel
+            {
+                HexCode = model.HexCode,
+                Name = model.Name,
+                ProductColorImages = model.ProductColorImages,
+                ProductId = model.ProductId,
+                ProductSizes = listSizes                
+            };
+
+            await _productColorService.AddAsync(newProductColor);
+
+            return RedirectToAction("Index","Product");
         }
     }
 }

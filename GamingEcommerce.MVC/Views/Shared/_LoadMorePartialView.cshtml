@@ -15,8 +15,11 @@
 
                 @if (product.ProductColors.Count > 0)
                 {
-                    <img class="lazyload img-hover" data-src="/images/products/@product.ProductColors[1].ProductColorImages[0].ImageName"
-                         src="/images/products/@product.ProductColors[1].ProductColorImages[0].ImageName" alt="image-product">
+                    @foreach(var color in product.ProductColors)
+                    {
+                        <img class="lazyload img-hover" data-src="/images/products/@color.ProductColorImages[0].ImageName"
+                             src="/images/products/@color..ProductColorImages[0].ImageName" alt="image-product">
+                    }
                 }
                 else
                 {
@@ -40,10 +43,17 @@
         </div>
         <div class="card-product-info">
             <a href="product-detail.html" class="title link">@product.Name</a>
-            <span class="price current-price">$@product.Price</span>
+            @if (product.DiscountPrice > 0)
+            {
+                <span class="price current-price" style="text-decoration:line-through">$@product.Price</span>
+                <span class="price current-price" >$@product.DiscountPrice</span>
+            } else
+            {
+                <span class="price current-price" >$@product.Price</span>
+            }
             <ul class="list-color-product">
 
-                @if (product.ProductColors.Count > 1)
+                @if (product.ProductColors.Count > 0)
                 {
                     <li class="list-color-item color-swatch active">
                         <span class="tooltip">@product.ProductColors[0].Name</span>

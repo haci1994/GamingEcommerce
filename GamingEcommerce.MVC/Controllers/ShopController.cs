@@ -30,7 +30,7 @@ namespace GamingEcommerce.MVC.Controllers
             var colors = await _productColorService.GetAllAsync();
             var total = products.Count();
 
-            products = products.Take(1).ToList();
+            products = products.Take(2).ToList();
 
             var model = new ShopPageViewModel
             {
@@ -49,7 +49,7 @@ namespace GamingEcommerce.MVC.Controllers
                 x => x.Include(z => z.ProductColors)
                     .ThenInclude(h => h.ProductColorImages)
                 .Include(z => z.ProductColors).ThenInclude(h => h.ProductSizes));
-            products = products.Skip(skip).Take(1).ToList();
+            products = products.Skip(skip).Take(2).ToList();
 
             var data = JsonConvert.SerializeObject(products);
 

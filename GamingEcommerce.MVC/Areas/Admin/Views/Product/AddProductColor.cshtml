@@ -1,0 +1,154 @@
+﻿@model CreateProductColorViewModel
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Create product Color for <span class="badge badge-info">@Model.ProductName</span></h4>
+                    <form class="forms-sample" method="post" asp-action="AddProductColor" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="ProductId" />
+                        <div class="form-group">
+                            <label for="colorname">Color Name</label>
+                            <input asp-for="Name" class="form-control" id="colorname" placeholder="Enter Color Name">
+                        </div>
+                        <div class="form-group" style="margin-bottom:1rem;">
+                            <label for="hexcode" style="display:block; font-weight:500; color:#343a40; margin-bottom:6px;">Select Color</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="color" id="colorPicker" style="width:45px; height:45px; border:none; cursor:pointer;">
+                                <input asp-for="HexCode" class="form-control" id="hexcode"
+                                       placeholder="Hex code (auto-filled)" readonly
+                                       style="flex:1; border:1px solid #ced4da; border-radius:6px; padding:10px 12px;">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom:1rem;">
+                            <label for="images" style="display:block; font-weight:500; color:#343a40; margin-bottom:6px;">Select Images</label>
+                            <input asp-for="Images" id="images" type="file" multiple accept="image/*"
+                                   class="form-control"
+                                   style="padding:8px 12px; border-radius:6px;">
+
+                            <!-- Preview sahəsi -->
+                            <div id="previewContainer"
+                                 style="margin-top:12px; display:flex; flex-wrap:wrap; gap:10px;"></div>
+                        </div>
+                        <div class="form-group" style="margin-bottom:1rem;">
+                            <label class="form-label" style="font-weight:500; color:#343a40;">Add Sizes</label>
+
+                            <!-- add düyməsi ayrı -->
+                            <div class="d-flex justify-content-end mb-2">
+                                <button type="button" id="addSizeBtn" class="btn btn-outline-primary btn-sm">+ Add</button>
+                            </div>
+
+                            <!-- burada yalnız ölçü input-ları olacaq -->
+                            <div id="sizeContainer"></div>
+                        </div>
+                        <div asp-validation-summary="All"></div>
+                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                        <button class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const picker = document.getElementById('colorPicker');
+    const hexInput = document.getElementById('hexcode');
+
+    picker.addEventListener('input', function() {
+      // Hex kodunu # işarəsiz yazırıq
+      hexInput.value = this.value.replace('#', '');
+    });
+
+      const imageInput = document.getElementById('images');
+    const previewContainer = document.getElementById('previewContainer');
+    let selectedFiles = [];
+
+    imageInput.addEventListener('change', function () {
+      selectedFiles = Array.from(this.files);
+      updatePreview();
+    });
+
+    function updatePreview() {
+      previewContainer.innerHTML = '';
+      selectedFiles.forEach((file, index) => {
+        if (!file.type.startsWith('image/')) return;
+
+        const reader = new FileReader();
+        reader.onload = e => {
+          const wrapper = document.createElement('div');
+          wrapper.style.position = 'relative';
+          wrapper.style.display = 'inline-block';
+
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.height = '100px';
+          img.style.width = 'auto';
+          img.style.objectFit = 'cover';
+          img.style.border = '1px solid #ddd';
+          img.style.borderRadius = '6px';
+          img.style.boxShadow = '0 1px 3px rgba(0,0,0,.1)';
+
+          const removeBtn = document.createElement('button');
+          removeBtn.innerHTML = '×';
+          removeBtn.type = 'button';
+          removeBtn.style.position = 'absolute';
+          removeBtn.style.top = '-6px';
+          removeBtn.style.right = '-6px';
+          removeBtn.style.background = '#dc3545';
+          removeBtn.style.color = 'white';
+          removeBtn.style.border = 'none';
+          removeBtn.style.borderRadius = '50%';
+          removeBtn.style.width = '20px';
+          removeBtn.style.height = '20px';
+          removeBtn.style.fontSize = '14px';
+          removeBtn.style.cursor = 'pointer';
+          removeBtn.addEventListener('click', () => removeImage(index));
+
+          wrapper.appendChild(img);
+          wrapper.appendChild(removeBtn);
+          previewContainer.appendChild(wrapper);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Yeni FileList yaradaraq input-a qaytarırıq
+      const dataTransfer = new DataTransfer();
+      selectedFiles.forEach(f => dataTransfer.items.add(f));
+      imageInput.files = dataTransfer.files;
+    }
+
+    function removeImage(index) {
+      selectedFiles.splice(index, 1);
+      updatePreview();
+    }
+
+       const sizeContainer = document.getElementById('sizeContainer');
+    const addBtn = document.getElementById('addSizeBtn');
+    let index = 0;
+
+    addBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      const div = document.createElement('div');
+      div.className = "d-flex gap-2 mb-2 align-items-center";
+      div.innerHTML = `
+        <input type="text" name="Sizes[${index}]" class="form-control" placeholder="e.g. Size name" />
+        <button type="button" class="btn btn-outline-danger remove">×</button>
+      `;
+      sizeContainer.appendChild(div);
+      index++;
+    });
+
+    sizeContainer.addEventListener('click', (e) => {
+      if (e.target.classList.contains('remove')) {
+        e.target.parentElement.remove();
+        // indeksləri yenilə
+        const inputs = sizeContainer.querySelectorAll('input[name^="Sizes"]');
+        inputs.forEach((inp, i) => inp.name = `Sizes[${i}]`);
+        index = inputs.length;
+      }
+    });
+
+</script>

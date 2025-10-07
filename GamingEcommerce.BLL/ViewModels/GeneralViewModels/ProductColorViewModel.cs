@@ -13,11 +13,14 @@ namespace GamingEcommerce.BLL.ViewModels.GeneralViewModels
 
     public class CreateProductColorViewModel
     {
+        public string? ProductName { get; set; }
         public string Name { get; set; } = null!;
         public int ProductId { get; set; }
         public string? HexCode { get; set; }
         public List<IFormFile> Images { get; set; } = new();
-        public List<CreateProductSizeViewModel> Sizes { get; set; } = new();
+        public List<CreateProductColorImageViewModel> ProductColorImages { get; set; } = [];
+        public List<string> Sizes { get; set; } = new();
+        public List<CreateProductSizeViewModel> ProductSizes { get; set; } = new();
     }
 
     public class UpdateProductColorViewModel
