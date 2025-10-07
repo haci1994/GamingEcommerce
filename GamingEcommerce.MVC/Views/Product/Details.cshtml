@@ -1,0 +1,240 @@
+﻿@model ProductViewModel
+
+<div class="tf-breadcrumb">
+    <div class="container">
+        <div class="tf-breadcrumb-wrap d-flex justify-content-between flex-wrap align-items-center">
+            <div class="tf-breadcrumb-list">
+                <a asp-action="Index" asp-controller="Home" class="text">Home</a>
+                <i class="icon icon-arrow-right"></i>
+                <a href="#" class="text">@Model.CategoryName</a>
+                <i class="icon icon-arrow-right"></i>
+                <span class="text">@Model.Name</span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /breadcrumb -->
+<!-- default -->
+<section class="flat-spacing-4 pt_0">
+    <div class="tf-main-product section-image-zoom">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="tf-product-media-wrap sticky-top">
+                        <div class="thumbs-slider">
+                            <div dir="ltr" class="swiper tf-product-media-thumbs other-image-zoom"
+                            data-direction="vertical">
+                                <div class="swiper-wrapper stagger-wrap">
+                                    @foreach(var color in Model.ProductColors)
+                                    {
+                                        @foreach(var img in color.ProductColorImages)
+                                        {
+                                            <div class="swiper-slide stagger-item" data-color="@color.Name">
+                                                <div class="item">
+                                                    <img class="lazyload"
+                                                    data-src="/images/products/@img.ImageName"
+                                                    src="/images/products/@img.ImageName" alt="img-product">
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+
+                                </div>
+                            </div>
+                            <div dir="ltr" class="swiper tf-product-media-main" id="gallery-swiper-started">
+                                <div class="swiper-wrapper">
+
+                                    @foreach (var color in Model.ProductColors)
+                                    {
+                                        @foreach (var img in color.ProductColorImages)
+                                        {
+                                            <div class="swiper-slide" data-color="@color.Name">
+                                                <a href="/images/products/@img.ImageName" target="_blank" class="item"
+                                                data-pswp-width="770px" data-pswp-height="1075px">
+                                                    <img class="tf-image-zoom lazyload"
+                                                    data-zoom="/images/products/@img.ImageName"
+                                                    data-src="/images/products/@img.ImageName"
+                                                    src="/images/products/@img.ImageName" alt="">
+                                                </a>
+                                            </div>
+                                        }
+
+                                    }
+                                </div>
+                                <div class="swiper-button-next button-style-arrow thumbs-next"></div>
+                                <div class="swiper-button-prev button-style-arrow thumbs-prev"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="tf-product-info-wrap position-relative">
+                        <div class="tf-zoom-main"></div>
+                        <div class="tf-product-info-list other-image-zoom">
+                            <div class="tf-product-info-title">
+                                <h5>@Model.Name</h5>
+                            </div>
+                            <div class="tf-product-info-price">
+                                @if(Model.DiscountPrice>0)
+                                {
+                                    <div class="price-on-sale">$@Model.DiscountPrice</div>
+                                    <div class="compare-at-price">$@Model.Price</div>
+                                    <div class="badges-on-sale"><span>@((int)(100 - Model.DiscountPrice/Model.Price*100))</span>% OFF</div>
+                                } else
+                                {
+                                    <div class="price-on-sale">$@Model.Price</div>
+                                }
+
+
+
+                            </div>
+                            <div class="tf-product-info-variant-picker">
+                                <div class="variant-picker-item">
+                                    <div class="variant-picker-label">
+                                        Color: <span class="fw-6 variant-picker-label-value value-currentColor">@Model.ProductColors[0].Name</span>
+                                    </div>
+                                    <div class="variant-picker-values">
+                                        @for(int i = 0; i< Model.ProductColors.Count; i++)
+                                        {
+                                            if(i==0)
+                                            {
+                                                <input id="values-@Model.ProductColors[i].Name" type="radio" name="@Model.ProductColors[i].Name" checked>
+                                                <label class="hover-tooltip radius-60 color-btn" for="values-@Model.ProductColors[i].Name"
+                                                data-color="@Model.ProductColors[i].Name" data-value="@Model.ProductColors[i].Name">
+                                                    <span class="btn-checkbox" style="background-color:#@Model.ProductColors[i].HexCode"></span>
+                                                    <span class="tooltip">@Model.ProductColors[i].Name</span>
+                                                </label>
+                                            } else
+                                            {
+                                                <input id="values-@Model.ProductColors[i].Name" type="radio" name="@Model.ProductColors[i].Name">
+                                                <label class="hover-tooltip radius-60 color-btn" for="values-@Model.ProductColors[i].Name"
+                                                data-color="@Model.ProductColors[i].Name" data-value="@Model.ProductColors[i].Name">
+                                                    <span class="btn-checkbox" style="background-color:#@Model.ProductColors[i].HexCode"></span>
+                                                    <span class="tooltip">@Model.ProductColors[i].Name</span>
+                                                </label>
+                                            }
+
+                                        }
+                                    </div>
+                                </div>
+                                <div class="variant-picker-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="variant-picker-label">
+                                            Size: <span class="fw-6 variant-picker-label-value">@Model.ProductColors[0].ProductSizes[0].Name</span>
+                                        </div>
+                                        <a href="#find_size" data-bs-toggle="modal" class="find-size fw-6">
+                                            Find
+                                            your size
+                                        </a>
+                                    </div>
+                                    <div class="variant-picker-values">
+                                        @for(int i = 0; i< Model.ProductColors.Count; i++)
+                                        {
+                                            @for (int j = 0; j < Model.ProductColors[i].ProductSizes.Count; j++)
+                                            {
+                                                @if (i == 0 && j==0)
+                                                {
+                                                    <input type="radio" name="@Model.ProductColors[i].Name-@Model.ProductColors[i].ProductSizes[j].Name" id="values-@Model.ProductColors[i].Name-@Model.ProductColors[i].ProductSizes[j].Name">
+                                                    <label class="style-text size-btn" for="values-@Model.ProductColors[i].Name-@Model.ProductColors[i].ProductSizes[j].Name" data-value="@Model.ProductColors[i].Name-@Model.ProductColors[i].ProductSizes[j].Name">
+                                                        <p>@Model.ProductColors[i].Name-@Model.ProductColors[i].ProductSizes[j].Name</p>
+                                                    </label>
+                                                } else
+                                                {
+                                                    <input type="radio" name="@Model.ProductColors[i].Name-@Model.ProductColors[i].ProductSizes[j].Name" id="values-@Model.ProductColors[i].Name-@Model.ProductColors[i].ProductSizes[j].Name">
+                                                    <label class="style-text size-btn" for="values-@Model.ProductColors[i].Name-@Model.ProductColors[i].ProductSizes[j].Name" data-value="@Model.ProductColors[i].Name-@Model.ProductColors[i].ProductSizes[j].Name">
+                                                        <p>@Model.ProductColors[i].Name-@Model.ProductColors[i].ProductSizes[j].Name</p>
+                                                    </label>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tf-product-info-quantity">
+                                <div class="quantity-title fw-6">Quantity</div>
+                                <div class="wg-quantity">
+                                    <span class="btn-quantity btn-decrease">-</span>
+                                    <input type="text" class="quantity-product" name="number" value="1">
+                                    <span class="btn-quantity btn-increase">+</span>
+                                </div>
+                            </div>
+                            <div class="tf-product-info-buy-button">
+                                <form class="">
+                                    <a href="#"
+                                       class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart">
+                                        <span>
+                                            Add
+                                            to cart -&nbsp;
+                                        </span><span class="tf-qty-price total-price">$@Model.Price</span>
+                                    </a>
+                                    <a href="#"
+                                       class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
+                                        <span class="icon icon-heart"></span>
+                                        <span class="tooltip">Add to Wishlist</span>
+                                        <span class="icon icon-delete"></span>
+                                    </a>
+                                    <div class="w-100">
+                                        <a href="#" class="btns-full">
+                                            Buy with <img src="images/payments/paypal.png" alt="">
+                                        </a>
+                                        <a href="#" class="payment-more-option">More payment options</a>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tf-product-info-trust-seal">
+                                <div class="tf-product-trust-mess">
+                                    <i class="icon-safe"></i>
+                                    <p class="fw-6">Guarantee Safe <br> Checkout</p>
+                                </div>
+                                <div class="tf-payment">
+                                    <img src="images/payments/visa.png" alt="">
+                                    <img src="images/payments/img-1.png" alt="">
+                                    <img src="images/payments/img-2.png" alt="">
+                                    <img src="images/payments/img-3.png" alt="">
+                                    <img src="images/payments/img-4.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</section>
+<!-- /default -->
+<!-- tabs -->
+<section class="flat-spacing-17 pt_0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="widget-tabs style-has-border">
+                    <ul class="widget-menu-tab">
+                        <li class="item-title active">
+                            <span class="inner">Description</span>
+                        </li>
+                        <li class="item-title">
+                            <span class="inner">Additional Information</span>
+                        </li>
+                        
+                    </ul>
+                    <div class="widget-content-tab">
+                        <div class="widget-content-inner active">
+                            <div class="">
+                                <p class="mb_30">
+                                    @Model.Description
+                                </p>                                
+                            </div>
+                        </div>
+                        <div class="widget-content-inner">
+                            @Model.AdditionalInformation
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /tabs -->
+

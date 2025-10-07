@@ -7,6 +7,9 @@ namespace GamingEcommerce.BLL.ViewModels.GeneralViewModels
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string? HexCode { get; set; }
+        public bool IsDeleted { get; set; }
+        public int ProductId { get; set; }
+
         public List<ProductColorImageViewModel> ProductColorImages { get; set; } = new();
         public List<ProductSizeViewModel> ProductSizes { get; set; } = new();        
     }
@@ -28,6 +31,9 @@ namespace GamingEcommerce.BLL.ViewModels.GeneralViewModels
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string? HexCode { get; set; }
+        public bool IsDeleted { get; set; }
+        public int ProductId { get; set; }
+
         public List<IFormFile>? NewImages { get; set; } // yeni şəkillər
         public List<ProductSizeViewModel> Sizes { get; set; } = new();
         public List<ProductColorImageViewModel> Images { get; set; } = new();

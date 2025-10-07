@@ -142,6 +142,25 @@ namespace GamingEcommerce.MVC.Areas.Admin.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(UpdateProductViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            
+            var updatedProduct = await _productService.UpdateAsync(model);
+            if (updatedProduct == null)
+            {
+                ModelState.AddModelError("", "Something went wrong");
+                return View(model);
+            }
+
+            return RedirectToAction("Index", "Product");
+        }
+
         public async Task<IActionResult> AddProductColor(int id)
         {
             var model = new CreateProductColorViewModel();
@@ -231,6 +250,50 @@ namespace GamingEcommerce.MVC.Areas.Admin.Controllers
             await _productColorService.AddAsync(newProductColor);
 
             return RedirectToAction("Index","Product");
+        }
+
+        public async Task<IActionResult> DeleteProductColor(int id)
+        {
+            var existColor = await _productColorService.GetAsync(predicate: x => x.Id == id, asnotracking: false);
+
+            if (existColor == null) return BadRequest();
+
+            existColor.IsDeleted = true;
+
+            var updateColor = new UpdateProductColorViewModel
+            {
+                HexCode = existColor.HexCode,
+                Id = id,
+                Name = existColor.Name,
+                IsDeleted = true,
+                ProductId = existColor.ProductId
+            };
+
+            await _productColorService.UpdateAsync(updateColor);
+
+            return RedirectToAction("Edit","Product", new { id = existColor.ProductId });
+        }
+
+        public async Task<IActionResult> RestoreProductColor(int id)
+        {
+            var existColor = await _productColorService.GetAsync(predicate: x => x.Id == id, asnotracking: false);
+
+            if (existColor == null) return BadRequest();
+
+            existColor.IsDeleted = true;
+
+            var updateColor = new UpdateProductColorViewModel
+            {
+                HexCode = existColor.HexCode,
+                Id = id,
+                Name = existColor.Name,
+                IsDeleted = false,
+                ProductId = existColor.ProductId
+            };
+
+            await _productColorService.UpdateAsync(updateColor);
+
+            return RedirectToAction("Edit", "Product", new {id = existColor.ProductId });
         }
     }
 }

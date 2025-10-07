@@ -5,7 +5,7 @@
 
 
 <!-- card product 1 -->
-@foreach (var product in products)
+@foreach (var product in products??[])
 {
     <div class="card-product grid" data-availability="In stock" data-brand="Ecomus">
         <div class="card-product-wrapper">

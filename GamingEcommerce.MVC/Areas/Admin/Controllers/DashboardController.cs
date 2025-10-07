@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GamingEcommerce.MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles="Admin")]
+    //[Authorize(Roles="SUPERADMIN")]
     public class DashboardController : Controller
     {
         public IActionResult Index()

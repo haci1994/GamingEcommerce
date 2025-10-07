@@ -29,6 +29,13 @@ namespace GamingEcommerce.BLL.Services.GeneralServices
 
             var products = _mapper.Map<List<ProductViewModel>>(productsFromDb);
 
+            foreach (var p in products)
+            {
+                p.ProductColors = p.ProductColors
+                    .Where(c => !c.IsDeleted)
+                    .ToList();
+            }
+
             return products;
         }
 
@@ -38,6 +45,13 @@ namespace GamingEcommerce.BLL.Services.GeneralServices
 
             var products = _mapper.Map<List<ProductViewModel>>(productsFromDb);
 
+            foreach (var p in products)
+            {
+                p.ProductColors = p.ProductColors
+                    .Where(c => !c.IsDeleted)
+                    .ToList();
+            }
+
             return products;
         }
 
@@ -46,6 +60,13 @@ namespace GamingEcommerce.BLL.Services.GeneralServices
             var productsFromDb = await _productRepository.GetRecommendedProductsAsync(count);
 
             var products = _mapper.Map<List<ProductViewModel>>(productsFromDb);
+
+            foreach (var p in products)
+            {
+                p.ProductColors = p.ProductColors
+                    .Where(c => !c.IsDeleted)
+                    .ToList();
+            }
 
             return products;
         }
@@ -60,6 +81,24 @@ namespace GamingEcommerce.BLL.Services.GeneralServices
             }
 
             var product = _mapper.Map<ProductViewModel>(productFromDb);
+
+            product.ProductColors = product.ProductColors.Where(x => !x.IsDeleted).ToList();
+
+            return product;
+        }
+
+        public async Task<ProductViewModel?> GetByIdAdminAsync(int id)
+        {
+            var productFromDb = await _productRepository.GetByIdAsync(id);
+
+            if (productFromDb == null)
+            {
+                return null;
+            }
+
+            var product = _mapper.Map<ProductViewModel>(productFromDb);
+
+            //product.ProductColors = product.ProductColors.Where(x => !x.IsDeleted).ToList();
 
             return product;
         }
@@ -112,7 +151,7 @@ namespace GamingEcommerce.BLL.Services.GeneralServices
                 selectList.Add(option);
             }
 
-            var product = await GetByIdAsync(id);
+            var product = await GetByIdAdminAsync(id);
 
             if (product == null) return null!;
 

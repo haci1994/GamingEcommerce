@@ -1,15 +1,15 @@
 ﻿@model UpdateProductViewModel
+<h1 class="heading">Edit @Model.Name</h1>
 
 <div class="content-wrapper">
+
     <div class="row">
         <div class="col-md-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Default form</h4>
-                    <p class="card-description">
-                        Adding a product
-                    </p>
-                    <form class="forms-sample" method="post" asp-action="Create">
+                    <h4 class="card-title">Edit basic information of @Model.Name</h4>
+
+                    <form class="forms-sample" method="post" asp-action="Edit">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input asp-for="Name" class="form-control" id="name" placeholder="Product Name">
@@ -21,7 +21,7 @@
                         <div class="form-group" style="margin-bottom: 1rem;">
                             <label for="category" style="display:block; font-weight:500; color:#343a40; margin-bottom:6px;">Select Category</label>
                             <select asp-for="CategoryId" asp-items="@Model.CategoryList"
-                                    style="width:100%; padding:10px 12px; border:1px solid #f3f3f3; background-color:#fff; font-size:14px; line-height:1.5; outline:none; transition:border-color .15s ease-in-out, box-shadow .15s ease-in-out;">
+                            style="width:100%; padding:10px 12px; border:1px solid #f3f3f3; background-color:#fff; font-size:14px; line-height:1.5; outline:none; transition:border-color .15s ease-in-out, box-shadow .15s ease-in-out;">
                             </select>
                         </div>
                         <div class="form-group">
@@ -36,7 +36,7 @@
                             <label for="DiscountPrice">Discount Price</label>
                             <input asp-for="DiscountPrice" class="form-control" id="DiscountPrice" placeholder="Discount Price">
                         </div>
-                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                        <button type="submit" class="btn btn-primary mr-2">Update</button>
                         <a class="btn btn-light" asp-action="index" asp-controller="product">Cancel</a>
                     </form>
                 </div>
@@ -47,38 +47,68 @@
                 <div class="card-body">
                     <h4 class="card-title">@Model.Name prduct variants</h4>
                     <a asp-action="addproductcolor" asp-controller="product" asp-route-id="@Model.Id" class="btn btn-success">Add a product color</a>
-                   <div class="table-responsive">
+                    <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>Img</th>
                                     <th>Color</th>
-                                    <th>Color Sizes and stock</th>
+                                    <th>Color Sizes</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach(var color in Model.ProductColors)
+                                @foreach(var color in Model.ProductColors??[])
                                 {
-                                    <tr>
-                                        <td>
-                                            @if (@color.ProductColorImages.Count>0)
-                                            {
-                                                <img src="~/images/products/@color.ProductColorImages[0].ImageName" />
-                                            } else
-                                            {
-                                                <img src="~/images/products/noimage.jpg" />
-                                            }
+                                    @if(!color.IsDeleted)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (@color.ProductColorImages.Count > 0)
+                                                {
+                                                    <img src="~/images/products/@color.ProductColorImages[0].ImageName" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/images/products/noimage.jpg" />
+                                                }
 
-                                        </td>
-                                        <td>@color.Name</td>
-                                        <td>@foreach (var size in color.ProductSizes ?? [])
-                                            {
-                                                <p class="badge badge-primary">@size.Name - @size.Stock x</p>
-                                            }
-                                        </td>
-                                        <td><a class="btn btn-warning">Edit</a> <a class="btn btn-danger">Delete</a></td>
-                                    </tr>
+                                            </td>
+                                            <td>@color.Name</td>
+                                            <td>
+                                                @foreach (var size in color.ProductSizes ?? [])
+                                                {
+                                                    <p class="badge badge-primary">@size.Name</p>
+                                                }
+                                            </td>
+                                            <td> <a asp-action="DeleteProductColor" asp-controller="Product" asp-route-id="@color.Id" class="btn btn-danger">Delete</a></td>
+                                        </tr>
+                                    } else
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (@color.ProductColorImages.Count > 0)
+                                                {
+                                                    <img src="~/images/products/@color.ProductColorImages[0].ImageName" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/images/products/noimage.jpg" />
+                                                }
+
+                                            </td>
+                                            <td>@color.Name</td>
+                                            <td>
+                                                @foreach (var size in color.ProductSizes ?? [])
+                                                {
+                                                    <p class="badge badge-primary">@size.Name</p>
+                                                }
+                                            </td>
+                                            <td><a class="btn btn-info" asp-action="RestoreProductColor" asp-controller="Product" asp-route-id="@color.Id">Restore</a>
+                                            <td>
+                                        </tr>
+                                    }
+
                                 }                         
                             </tbody>
                         </table>
