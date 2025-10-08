@@ -9,7 +9,7 @@
 {
     <div class="card-product grid" data-availability="In stock" data-brand="Ecomus">
         <div class="card-product-wrapper">
-            <a href="product-detail.html" class="product-img">
+            <a asp-action="Details" asp-controller="Product" asp-route-id="@product.Id" class="product-img">
                 <img class="lazyload img-product" data-src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName"
                      src="/images/products/@product.ProductColors[0].ProductColorImages[0].ImageName" alt="image-product">
 

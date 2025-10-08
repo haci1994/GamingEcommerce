@@ -79,7 +79,9 @@ namespace GamingEcommerce.DAL.DataContext.Repositories
                 query = query.AsNoTracking();
             }
 
-            return await query.FirstOrDefaultAsync();
+            var entity = await query.FirstOrDefaultAsync();
+
+            return entity;
         }
 
         public virtual async Task<T?> GetByIdAsync(int id)

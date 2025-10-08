@@ -23,8 +23,8 @@ namespace GamingEcommerce.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var categories = await _categoryService.GetAllAsync();
-            
-            var products = await _productService.GetAllAsync(predicate: x => !x.IsDeleted && x.ProductColors.Count>0,
+
+            var products = await _productService.GetAllAsync(predicate: x => !x.IsDeleted && x.ProductColors.Count > 0,
                 include:
                 x => x.Include(z => z.ProductColors)
                     .ThenInclude(h => h.ProductColorImages)
@@ -41,11 +41,12 @@ namespace GamingEcommerce.MVC.Controllers
             else
             {
                 total = products.Count();
-            };
+            }
+            ;
 
             total = products.Count();
 
-            foreach(var product in products)
+            foreach (var product in products)
             {
                 product.ProductColors = product.ProductColors.Where(x => !x.IsDeleted).ToList();
             }
@@ -80,6 +81,13 @@ namespace GamingEcommerce.MVC.Controllers
             var data = JsonConvert.SerializeObject(products);
 
             return Content(data, "application/json");
+        }
+
+        public async Task<IActionResult> Checkout()
+        {
+
+
+            return View();
         }
     }
 }

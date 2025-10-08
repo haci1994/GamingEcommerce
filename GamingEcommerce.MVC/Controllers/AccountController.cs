@@ -1,10 +1,14 @@
-﻿using GamingEcommerce.BLL.ViewModels.WebsiteViewModels;
+﻿using AutoMapper;
+using GamingEcommerce.BLL.Services.Contracts;
+using GamingEcommerce.BLL.ViewModels.GeneralViewModels;
+using GamingEcommerce.BLL.ViewModels.WebsiteViewModels;
 using GamingEcommerce.DAL.DataContext.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.FlowAnalysis;
 using System.Drawing.Printing;
+using System.Threading.Tasks;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
@@ -16,15 +20,19 @@ namespace GamingEcommerce.MVC.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IAddressService _addressService;
+        private readonly IMapper _mapper;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager, IAddressService addressService, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _addressService = addressService;
+            _mapper = mapper;
         }
 
-        [Authorize(Roles ="Client")]
+        [Authorize(Roles = "Client")]
         public IActionResult Dashboard()
         {
             return View();
@@ -114,6 +122,126 @@ namespace GamingEcommerce.MVC.Controllers
             await _userManager.AddToRoleAsync(user, "Client");
             
             return RedirectToAction("Login","Account");
+        }
+
+        public async Task<IActionResult> Address()
+        {
+            var defaultAddress = await _addressService.GetAsync(predicate: x => x.IsDefault && !x.IsDeleted);
+
+            var list = await _addressService.GetAllAsync(predicate: x => !x.IsDeleted && !x.IsDefault);
+
+            var model = new AddressPageViewModel
+            {
+                DefaultAddress = defaultAddress,
+                OtherAddresses = list
+            };
+
+            return View(model);
+        }
+
+        public IActionResult AddAddress()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddAddress(CreateAddressViewModel address)
+        {
+            var addresses = await _addressService.GetAllAsync(predicate: x=> !x.IsDeleted);
+
+            if (addresses.Count == 0) address.IsDefault = true;
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null) return BadRequest();
+
+            address.UserId = user.Id;
+
+            await _addressService.AddAsync(address);
+
+            return RedirectToAction("Address", "Account");
+        }
+
+        public async Task<IActionResult> UpdateAddress(int id)
+        {
+            var existAddress = await _addressService.GetByIdAsync(id);
+
+            if (existAddress == null) return BadRequest();
+
+            var updateModel = _mapper.Map<UpdateAddressViewModel>(existAddress);
+
+            return View(updateModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateAddress(int id, UpdateAddressViewModel address)
+        {
+            var current = await _addressService.GetByIdAsync(id);
+            if (current == null) return NotFound();
+
+            
+            address.Id = id;
+            address.UserId = current.UserId;
+            address.IsDefault = current.IsDefault;
+
+            var ok = await _addressService.UpdateAsync(address);
+            if (!ok)
+            {
+                ModelState.AddModelError("", "Update failed");
+                return View(address);
+            }
+
+            return RedirectToAction("Address", "Account");
+        }
+
+        public async Task<IActionResult> DeleteAddress(int id)
+        {
+            var current = await _addressService.GetByIdAsync(id);
+            if (current == null) return NotFound();
+
+            current.IsDeleted = true;
+
+            if (current.IsDefault)
+            {
+                var list = await _addressService.GetAllAsync(predicate: x=> !x.IsDeleted);
+                var newCurrent = list.FirstOrDefault();
+
+                if (newCurrent != null)
+                {
+                  newCurrent = list.Skip(1).Take(1).FirstOrDefault();
+                }
+                newCurrent!.IsDefault = true;
+
+                await _addressService.UpdateAsync(_mapper.Map<UpdateAddressViewModel>(newCurrent));
+            }
+
+            var ok = await _addressService.UpdateAsync(_mapper.Map<UpdateAddressViewModel>(current));
+            if (!ok)
+            {
+                ModelState.AddModelError("", "Update failed");
+                return RedirectToAction("Address", "Account");
+            }
+
+            return RedirectToAction("Address", "Account");
+        }
+
+        public async Task<IActionResult> MakeDefault(int id)
+        {
+            var currentDefault = await _addressService.GetAsync(predicate: x=> x.IsDefault && !x.IsDeleted);
+
+            currentDefault.IsDefault = false;
+
+            await _addressService.UpdateAsync(_mapper.Map<UpdateAddressViewModel>(currentDefault));
+
+            var newDefault = await _addressService.GetByIdAsync(id);
+
+            newDefault.IsDefault=true;
+
+            await _addressService.UpdateAsync(_mapper.Map<UpdateAddressViewModel>(newDefault));
+
+            return RedirectToAction("Address", "Account");
         }
     }
 }

@@ -152,6 +152,7 @@ namespace GamingEcommerce.MVC.Areas.Admin.Controllers
             }
             
             var updatedProduct = await _productService.UpdateAsync(model);
+
             if (updatedProduct == null)
             {
                 ModelState.AddModelError("", "Something went wrong");

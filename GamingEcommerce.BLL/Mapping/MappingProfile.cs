@@ -12,6 +12,7 @@ namespace GamingEcommerce.BLL.Mapping
             CreateMap<Address, AddressViewModel>().ReverseMap();
             CreateMap<Address, CreateAddressViewModel>().ReverseMap();
             CreateMap<Address, UpdateAddressViewModel>().ReverseMap();
+            CreateMap<AddressViewModel, UpdateAddressViewModel>().ReverseMap();
 
             CreateMap<Category, CategoryViewModel>().ReverseMap();
             CreateMap<Category, CreateCategoryViewModel>().ReverseMap();

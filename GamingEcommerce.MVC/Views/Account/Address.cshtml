@@ -1,0 +1,95 @@
+﻿@{
+    AddressPageViewModel model = Model;
+    var defaultAddress = model.DefaultAddress;
+    var addresList = model.OtherAddresses;
+}
+
+<!-- page-title -->
+<div class="tf-page-title">
+    <div class="container-full">
+        <div class="heading text-center">Address</div>
+    </div>
+</div>
+<!-- /page-title -->
+<!-- page-cart -->
+<section class="flat-spacing-11">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="wrap-sidebar-account">
+                    <ul class="my-account-nav">
+                        <li><a href="my-account.html" class="my-account-nav-item ">Dashboard</a></li>
+                        <li><a href="my-account-orders.html" class="my-account-nav-item">Orders</a></li>
+                        <li><span class="my-account-nav-item active">Address</span></li>
+                        <li><a href="my-account-edit.html" class="my-account-nav-item">Account Details</a></li>
+                        <li><a href="my-account-wishlist.html" class="my-account-nav-item">Wishlist</a></li>
+                        <li><a href="login.html" class="my-account-nav-item">Logout</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="col-lg-9">
+                <div class="my-account-content account-address">
+                    <div class="text-center widget-inner-address">
+                        <a class="tf-btn btn-fill animate-hover-btn btn-address mb_20" asp-action="AddAddress" asp-controller="Account">
+                            Add a new
+                            address
+                        </a>
+                        <div class="list-account-address">
+
+                            @if(defaultAddress!=null)
+                            {
+                                <div class="account-address-item" style="border:1px solid lightgreen; border-radius:10px">
+                                    <h6 class="mb_20 badge badge-success">Default</h6>
+                                    <p>@defaultAddress.FirstName @defaultAddress.LastName</p>
+                                    <p>@defaultAddress.AddressLine</p>
+                                    <p>@defaultAddress.Country</p>
+                                    <p>@defaultAddress.City</p>
+                                    <p>@defaultAddress.PostalZipCode</p>
+                                    <p class="mb_10">@defaultAddress.PhoneNumber</p>
+                                    <div class="d-flex gap-10 justify-content-center">
+                                        <a asp-action="UpdateAddress" asp-controller="Account" asp-route-id="@defaultAddress.Id" class="tf-btn btn-fill animate-hover-btn justify-content-center btn-edit-address">
+                                            <span>Edit</span>
+                                        </a>
+                                        <a asp-action="DeleteAddress" asp-controller="Account" asp-route-id="@defaultAddress.Id" class="tf-btn btn-outline animate-hover-btn justify-content-center">
+                                            <span>Delete</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+
+                            @foreach(var address in addresList??[])
+                            {
+                                <div class="account-address-item" >
+                                    <a asp-action="MakeDefault" asp-controller="Account" asp-route-id="@address.Id" class="mb_20 btn btn-outline-primary">Make default</a>
+                                    <p>@address.FirstName @address.LastName</p>
+                                    <p>@address.AddressLine</p>
+                                    <p>@address.Country</p>
+                                    <p>@address.City</p>
+                                    <p>@address.PostalZipCode</p>
+                                    <p class="mb_10">@address.PhoneNumber</p>
+                                    <div class="d-flex gap-10 justify-content-center">
+                                        <a asp-action="UpdateAddress" asp-controller="Account" asp-route-id="@address.Id" class="tf-btn btn-fill animate-hover-btn justify-content-center btn-edit-address">
+                                            <span>Edit</span>
+                                        </a>
+                                        <a asp-action="DeleteAddress" asp-controller="Account" asp-route-id="@address.Id" class="tf-btn btn-outline animate-hover-btn justify-content-center">
+                                            <span>Delete</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+</section>
+<!-- page-cart -->
+
+<div class="btn-sidebar-account">
+    <button data-bs-toggle="offcanvas" data-bs-target="#mbAccount" aria-controls="offcanvas">
+        <i class="icon icon-sidebar-2"></i>
+    </button>
+</div>

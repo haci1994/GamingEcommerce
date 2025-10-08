@@ -97,12 +97,12 @@
                                     {
                                         <div class="tf-mini-cart-item" id="@item.ProductId-@item.ProductId">
                                             <div class="tf-mini-cart-image">
-                                                <a href="product-detail.html">
+                                                <a asp-action="Details" asp-controller="Product" asp-route-id="@item.ProductId">
                                                     <img src="~/images/products/@item.ImageName" alt="">
                                                 </a>
                                             </div>
                                             <div class="tf-mini-cart-info">
-                                                <a class="title link" href="product-detail.html">@item.Name</a>
+                                                <a class="title link" asp-action="Details" asp-controller="Product" asp-route-id="@item.ProductId">@item.Name</a>
                                                 <div class="meta-variant">@item.Color</div>
                                                 <div class="price fw-6">$@item.Price </div>
                                                 <div class="tf-mini-cart-btns">
@@ -136,7 +136,7 @@
                                         View
                                         cart
                                     </a>
-                                    <a href="checkout.html"
+                                    <a asp-action="Checkout" asp-controller="Shop"
                                     class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center">
                                         <span>
                                             Check
