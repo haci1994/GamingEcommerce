@@ -25,7 +25,7 @@ namespace GamingEcommerce.BLL.ViewModels.GeneralViewModels
         public  string AddressLine { get; set; } = null!;
         public  string City { get; set; } = null!;
         public  string Country { get; set; } = null!;
-        public  string? Province { get; set; }
+        public string Province { get; set; } = null!;
         public  string PostalZipCode { get; set; } = null!;
         public  string PhoneNumber { get; set; } = null!;
         public bool IsDefault { get; set; }

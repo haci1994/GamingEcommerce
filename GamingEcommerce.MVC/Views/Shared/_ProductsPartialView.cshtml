@@ -250,7 +250,7 @@
       return `
         <div class="card-product grid" data-availability="In stock" data-brand="Ecomus">
           <div class="card-product-wrapper">
-            <a href="product-detail.html" class="product-img">
+            <a href="/Product/Details/${product.Id}" class="product-img">
               <img class="lazyload img-product" data-src="${mainImg}" src="${mainImg}" alt="image-product">
               ${hoverImagesHtml(product)}
             </a>
@@ -269,7 +269,7 @@
           </div>
 
           <div class="card-product-info">
-            <a href="product-detail.html" class="title link">${product.Name}</a>
+            <a href="/Product/Details/${product.Id}" class="title link">${product.Name}</a>
             ${priceHtml(product)}
             <ul class="list-color-product">
               ${colorSwatchesHtml(product)}

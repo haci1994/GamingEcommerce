@@ -50,8 +50,8 @@ namespace GamingEcommerce.BLL.Mapping
 
             CreateMap<ProductColor, ProductColorViewModel>().ReverseMap();
             CreateMap<CreateProductColorViewModel, ProductColor>()
-    .ForMember(d => d.Product, o => o.Ignore())           // yeni Product yaratmasın
-    .ForMember(d => d.ProductId, o => o.MapFrom(s => s.ProductId));
+                .ForMember(d => d.Product, o => o.Ignore())
+                .ForMember(d => d.ProductId, o => o.MapFrom(s => s.ProductId));
 
             // Children
             CreateMap<CreateProductColorImageViewModel, ProductColorImage>();

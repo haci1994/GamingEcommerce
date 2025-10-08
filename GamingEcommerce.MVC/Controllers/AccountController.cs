@@ -6,9 +6,6 @@ using GamingEcommerce.DAL.DataContext.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.FlowAnalysis;
-using System.Drawing.Printing;
-using System.Threading.Tasks;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
@@ -148,6 +145,11 @@ namespace GamingEcommerce.MVC.Controllers
         [Authorize]
         public async Task<IActionResult> AddAddress(CreateAddressViewModel address)
         {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Error");
+                return View(address);
+            }
             var addresses = await _addressService.GetAllAsync(predicate: x=> !x.IsDeleted);
 
             if (addresses.Count == 0) address.IsDefault = true;
