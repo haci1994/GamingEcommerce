@@ -18,8 +18,10 @@ namespace GamingEcommerce.MVC.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IAddressService _addressService;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IDiscountCodeService _couponService;
+        private readonly IOrderService _orderService;
 
-        public ShopController(ICategoryService categoryService, IProductService productService, IProductColorService productColorService, UserManager<AppUser> userManager, IAddressService addressService, SignInManager<AppUser> signInManager)
+        public ShopController(ICategoryService categoryService, IProductService productService, IProductColorService productColorService, UserManager<AppUser> userManager, IAddressService addressService, SignInManager<AppUser> signInManager, IDiscountCodeService couponService, IOrderService orderService)
         {
             _categoryService = categoryService;
             _productService = productService;
@@ -27,6 +29,8 @@ namespace GamingEcommerce.MVC.Controllers
             _userManager = userManager;
             _addressService = addressService;
             _signInManager = signInManager;
+            _couponService = couponService;
+            _orderService = orderService;
         }
 
         public async Task<IActionResult> Index()
@@ -134,6 +138,23 @@ namespace GamingEcommerce.MVC.Controllers
             };
 
             return View(model);
+        }
+
+        public async Task<IActionResult> CheckCoupon(decimal total, string code)
+        {
+            var existActiveCoupon = await _couponService.GetAsync(predicate: x => !x.IsDeleted && x.IsActive);
+
+            if (existActiveCoupon == null) return View(JsonConvert.SerializeObject(total));
+
+            var allOrdersOftheCoupon = await _orderService.GetAllAsync(x=> x.DiscountCodeId == existActiveCoupon.Id);
+
+            var usageCount = allOrdersOftheCoupon.Count();
+
+            if(existActiveCoupon.MaxUsageCount <= usageCount) return View(JsonConvert.SerializeObject(total));
+
+            var newTotal = total - total * existActiveCoupon.Percentage / 100;
+
+            return View(JsonConvert.SerializeObject(newTotal));            
         }
     }
 }
