@@ -1,0 +1,43 @@
+﻿@model CreateDiscountCodeViewModel
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Create A Category</h4>
+                    <form class="forms-sample" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="Name">Name</label>
+                            <input asp-for="Name" class="form-control" id="Name" placeholder="Coupon Name">
+                            <span asp-validation-for="Name" class="text text-small text-danger"></span>
+                            <span asp-validation-for="Name"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Code">Name</label>
+                            <input asp-for="Code" class="form-control" id="Code" placeholder="Coupon Code">
+                            <span asp-validation-for="Code" class="text text-small text-danger"></span>
+                            <span asp-validation-for="Code"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Percentage">Percentage</label>
+                            <input asp-for="Percentage" class="form-control" id="Percentage" placeholder="Coupon Discount Percentage">
+                            <span asp-validation-for="Percentage" class="text text-small text-danger"></span>
+                            <span asp-validation-for="Percentage"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="limit">Max limit</label>
+                            <input asp-for="MaxUsageCount" class="form-control" id="limit" placeholder="Max usage limit">
+                            <span asp-validation-for="Code" class="text text-small text-danger"></span>
+                            <span asp-validation-for="MaxUsageCount"></span>
+                        </div>                       
+                        <div asp-validation-summary="All"></div>
+
+                        <button type="submit" class="btn btn-primary mr-2">Create</button>
+                        <button class="btn btn-light" asp-action="Index" asp-controller="Coupon">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

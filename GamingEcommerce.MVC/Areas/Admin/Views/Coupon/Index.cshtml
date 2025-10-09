@@ -1,0 +1,65 @@
+﻿@model List<DiscountCodeViewModel>
+
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Manage Categories</h4>
+
+                <a class="btn btn-primary" asp-action="Create" asp-controller="Coupon">Add a coupon</a>
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>STATUS</th>
+                                <th>Name</th>
+                                <th>Code</th>
+                                <th>Percentage</th>
+                                <th>Used</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var coupon in Model) {
+                                <tr>                                    
+                                    @if (coupon.IsActive)
+                                    {
+                                    <td><span class="badge badge-pill badge-success">Active</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td><span class="badge badge-pill badge-danger">Deactive</span></td>
+                                    }
+                                    <td>@coupon.Name</td>
+                                    <td>@coupon.Code</td>
+                                    <td>@coupon.Percentage</td>
+                                    <td>@coupon.Used of @coupon.MaxUsageCount</td>
+                                    <td>
+                                         @if (coupon.IsDeleted)
+                                        {
+                                            <a class="btn btn-outline-info" asp-action="Restore" asp-controller="Coupon" asp-route-id="@coupon.Id">Restore</a>
+                                        } else
+                                        {
+                                            if(coupon.IsActive)
+                                            {
+                                                <a class="btn btn-warning" asp-action="Deactivate" asp-controller="Coupon" asp-route-id="@coupon.Id">Deactivate</a>
+                                            } else
+                                            {
+                                                <a class="btn btn-outline-warning" asp-action="Activate" asp-controller="Coupon" asp-route-id="@coupon.Id">Activate</a>
+                                            }
+                                            
+                                       
+                                            <a class="btn btn-danger" asp-action="Delete" asp-controller="Coupon" asp-route-id="@coupon.Id">Delete</a>
+                                        }
+                                        
+                                    </td>
+                                </tr>       
+                            }                     
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div
+</div>

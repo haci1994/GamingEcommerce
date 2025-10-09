@@ -10,7 +10,7 @@ namespace GamingEcommerce.MVC.Controllers
 {
     public class CartController : Controller
     {
-        private readonly IProductService _productService;
+        internal readonly IProductService _productService;
 
         public CartController(IProductService productService)
         {

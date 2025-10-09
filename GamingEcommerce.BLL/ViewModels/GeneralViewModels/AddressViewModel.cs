@@ -5,16 +5,16 @@ namespace GamingEcommerce.BLL.ViewModels.GeneralViewModels
     public class AddressViewModel
     {
         public int Id { get; set; }
-        public required string FirstName { get; set; }
-        public required string LastName { get; set; }
-        public required string AddressLine { get; set; }
-        public required string City { get; set; }
-        public required string Country { get; set; }
-        public required string Province { get; set; }
-        public required string PostalZipCode { get; set; }
-        public required string PhoneNumber { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? AddressLine { get; set; }
+        public string? City { get; set; }
+        public string? Country { get; set; }
+        public string? Province { get; set; }
+        public string? PostalZipCode { get; set; }
+        public string? PhoneNumber { get; set; }
         public bool IsDefault { get; set; }
-        public bool IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; }
         public string UserId { get; set; } = null!;
     }
 
@@ -49,7 +49,5 @@ namespace GamingEcommerce.BLL.ViewModels.GeneralViewModels
         public bool IsDefault { get; set; }
         public string? UserId { get; set; }
         public bool IsDeleted { get; set; }
-
-
     }
 }

@@ -1,6 +1,9 @@
 ﻿using GamingEcommerce.BLL.Services.Contracts;
+using GamingEcommerce.BLL.Services.GeneralServices;
 using GamingEcommerce.BLL.ViewModels.GeneralViewModels;
 using GamingEcommerce.BLL.ViewModels.WebsiteViewModels;
+using GamingEcommerce.DAL.DataContext.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -12,12 +15,18 @@ namespace GamingEcommerce.MVC.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IProductService _productService;
         private readonly IProductColorService _productColorService;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IAddressService _addressService;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public ShopController(ICategoryService categoryService, IProductService productService, IProductColorService productColorService)
+        public ShopController(ICategoryService categoryService, IProductService productService, IProductColorService productColorService, UserManager<AppUser> userManager, IAddressService addressService, SignInManager<AppUser> signInManager)
         {
             _categoryService = categoryService;
             _productService = productService;
             _productColorService = productColorService;
+            _userManager = userManager;
+            _addressService = addressService;
+            _signInManager = signInManager;
         }
 
         public async Task<IActionResult> Index()
@@ -85,9 +94,46 @@ namespace GamingEcommerce.MVC.Controllers
 
         public async Task<IActionResult> Checkout()
         {
+            AddressViewModel address;
 
+            if (User.Identity != null && User.Identity.IsAuthenticated) //girish edib
+            {
+                var user = await _userManager.GetUserAsync(User);
 
-            return View();
+                if (user == null) return BadRequest();
+
+                var defaultAddress = await _addressService.GetAsync(predicate: x => x.UserId == user.Id && x.IsDefault);
+
+                if (defaultAddress == null)
+                {
+                    address = new AddressViewModel();
+                }
+                else
+                {
+                    address = defaultAddress;
+                }
+            }
+            else
+            {
+                address = new AddressViewModel();
+            }
+
+            var json = Request.Cookies["GAMING_ECOMMERCE_BASKET"];
+
+            var list = new List<BasketItemViewModel>();
+
+            if (!string.IsNullOrEmpty(json))
+            {
+                list = JsonConvert.DeserializeObject<List<BasketItemViewModel>>(json) ?? [];
+            }
+
+            var model = new CheckoutPageViewModel
+            {
+                DefaultAddress = address,
+                Products = list
+            };
+
+            return View(model);
         }
     }
 }
