@@ -51,7 +51,11 @@
                                             <a class="btn btn-outline-info" href="@Url.Action("Restore", "Product", new { area = "Admin", id = product.Id })">Restore</a>
                                         } else
                                         {
-                                            <a class="btn btn-success">See Details</a>
+                                            @if (@product.ProductColors.Count > 0)
+                                            {
+                                                <a class="btn btn-success" asp-action="Details" asp-controller="Product" asp-area="" asp-route-id=@product.Id target="_blank">See Details</a>
+                                            }
+                                            
                                             <a class="btn btn-warning" href="@Url.Action("Edit", "Product", new { area = "Admin", id = product.Id })">Edit</a>
 
                                             <a class="btn btn-danger" href="@Url.Action("Delete", "Product", new { area = "Admin", id = product.Id })">Delete</a>

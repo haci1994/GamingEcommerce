@@ -29,7 +29,7 @@ namespace GamingEcommerce.MVC.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = "Client")]
+        [Authorize]
         public IActionResult Dashboard()
         {
             return View();
@@ -123,9 +123,13 @@ namespace GamingEcommerce.MVC.Controllers
 
         public async Task<IActionResult> Address()
         {
-            var defaultAddress = await _addressService.GetAsync(predicate: x => x.IsDefault && !x.IsDeleted);
+            var user = await _userManager.GetUserAsync(User);
 
-            var list = await _addressService.GetAllAsync(predicate: x => !x.IsDeleted && !x.IsDefault);
+            if (user == null) { return View(); }
+
+            var defaultAddress = await _addressService.GetAsync(predicate: x => x.IsDefault && !x.IsDeleted && x.UserId == user.Id);
+
+            var list = await _addressService.GetAllAsync(predicate: x => !x.IsDeleted && !x.IsDefault && x.UserId == user.Id);
 
             var model = new AddressPageViewModel
             {
